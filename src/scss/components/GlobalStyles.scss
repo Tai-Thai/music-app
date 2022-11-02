@@ -29,6 +29,10 @@ a {
   display: inline-block;
 }
 
+svg {
+  max-width: 100%;
+}
+
 img {
   width: 100%;
   max-width: 100%;
@@ -121,107 +125,6 @@ img {
   @include tablet {
     .align-items-md-#{$key} {
       align-items: $value;
-    }
-  }
-}
-
-// Grid system
-.row {
-  --gutter-x: $gutter-x;
-  --gutter-y: $gutter-y;
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: calc(-1 * var(--gutter-x));
-  margin-right: calc(-1 * var(--gutter-x));
-  padding: var(--gutter-x);
-}
-
-@for $i from 0 through 6 {
-  .gx-#{$i} {
-    --gutter-x: calc(calc(#{$i} * 0.5) * 1rem);
-  }
-  .gy-#{$i} {
-    --gutter-y: calc(calc(#{$i} * 0.5) * 1rem);
-  }
-
-  @include mobile {
-    .gx-sm-#{$i} {
-      --gutter-x: calc(calc(#{$i} * 0.5) * 1rem);
-    }
-    .gy-sm-#{$i} {
-      --gutter-y: calc(calc(#{$i} * 0.5) * 1rem);
-    }
-  }
-
-  @include tablet {
-    .gx-md-#{$i} {
-      --gutter-x: calc(calc(#{$i} * 0.5) * 1rem);
-    }
-    .gy-md-#{$i} {
-      --gutter-y: calc(calc(#{$i} * 0.5) * 1rem);
-    }
-  }
-}
-
-.col-0 {
-  display: none;
-}
-.col-fill {
-  width: unset !important;
-  max-width: unset !important;
-  flex-grow: 1;
-}
-
-@include mobile {
-  .col-sm-0 {
-    display: none;
-  }
-  .col-sm-fill {
-    width: unset !important;
-    max-width: unset !important;
-    flex-grow: 1;
-  }
-}
-@include tablet {
-  .col-md-0 {
-    display: none;
-  }
-  .col-md-fill {
-    width: unset !important;
-    max-width: unset !important;
-    flex-grow: 1;
-  }
-}
-
-@for $i from 1 through 12 {
-  .col-#{$i} {
-    width: ($i * 100 / 12) * 1%;
-    max-width: ($i * 100 / 12) * 1%;
-    padding-left: var(--gutter-x);
-    padding-right: var(--gutter-x);
-    padding-top: var(--gutter-y);
-    padding-bottom: var(--gutter-y);
-  }
-
-  @include tablet {
-    .col-md-#{$i} {
-      width: ($i * 100 / 12) * 1%;
-      max-width: ($i * 100 / 12) * 1%;
-      padding-left: var(--gutter-x);
-      padding-right: var(--gutter-x);
-      padding-top: var(--gutter-y);
-      padding-bottom: var(--gutter-y);
-    }
-  }
-
-  @include mobile {
-    .col-sm-#{$i} {
-      width: ($i * 100 / 12) * 1%;
-      max-width: ($i * 100 / 12) * 1%;
-      padding-left: var(--gutter-x);
-      padding-right: var(--gutter-x);
-      padding-top: var(--gutter-y);
-      padding-bottom: var(--gutter-y);
     }
   }
 }

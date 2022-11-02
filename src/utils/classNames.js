@@ -1,31 +1,29 @@
 function classNames(...classList) {
-  console.log(classList);
-  //   let results = '';
-  //   for (let classItem in classList) {
-  //     if (typeof classItem === 'string') {
-  //       if (this[className]) results += this[classItem];
-  //     }
-  //   }
-
   const results = classList
+    // eslint-disable-next-line array-callback-return
     .map((classItem) => {
       if (typeof classItem === 'string') {
         return ` ${this[classItem] || classItem}`;
-      } else if (typeof classItem === 'array') {
-        classItem.flat().map((className) => ` ${this[className] || className}`);
+        // eslint-disable-next-line valid-typeof
+      } else if (Array.isArray(classItem)) {
+        return classItem.flat().map((className) => {
+          if (typeof className === 'object') {
+            const results = classNames.call(this, className);
+            return ` ${results}`;
+          }
+          return ` ${this[className] || className}`;
+        });
       } else if (typeof classItem === 'object') {
         let list = '';
         for (let key in classItem) {
-          console.log({ value: classItem[key], key });
           if (classItem[key]) {
             list += ` ${this[key] || key}`;
           }
         }
-        console.log(list);
         return list;
       }
     })
-    .filter(Boolean)
+    .flat()
     .join('')
     .trim();
 
