@@ -1,0 +1,55 @@
+// Color
+$primary: #307db8;
+$secondary: #facd66;
+$white: #ffffff;
+$light: #efeee0;
+$black: rgb(0, 0, 0);
+$dark: #1d2123;
+$dark-alt: #1a1e1f;
+$alt: #a4c7c6;
+$favorite-color: #e5524a;
+
+// Height
+$nav-height: 73px;
+
+// Breakpoints
+$breakpoints: (
+  'sm': 575px,
+  'md': 767px
+);
+
+// Gap - padding, margin
+
+// Gutter Grid
+$gutter-x: 1.5rem;
+$gutter-y: 1.5rem;
+
+// Flexbox
+$justify-content: (
+  center: center,
+  around: space-around,
+  evenly: space-evenly,
+  between: space-between
+);
+$align-items: (
+  center: center,
+  start: flex-start,
+  end: flex-end
+);
+
+$flex-direction: (row, column, row-reverse, column-reverse);
+
+// Text
+$text-align: left, center, right;
+
+// Color
+$colors: (
+  light: $light,
+  dark: $dark,
+  primary: $primary,
+  secondary: $secondary,
+  white: $white
+);
+
+// Font Size
+$font-size: (10, 12, 14, 17, 20, 24, 29, 35);

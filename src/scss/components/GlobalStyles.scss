@@ -1,0 +1,307 @@
+@use '../index.scss' as *;
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap');
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.6rem;
+}
+
+ul,
+ol {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+span,
+a {
+  display: inline-block;
+}
+
+img {
+  width: 100%;
+  max-width: 100%;
+}
+
+.container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+
+  @include tablet {
+    max-width: 720px;
+  }
+
+  @include mobile {
+    max-width: 540px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+// Flexbox
+.d-flex {
+  display: flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+@include mobile {
+  .flex-sm-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+@include tablet {
+  .flex-md-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+@each $direction in $flex-direction {
+  .flex-#{$direction} {
+    flex-direction: $direction;
+  }
+  @include mobile {
+    .flex-sm-#{$direction} {
+      flex-direction: $direction;
+    }
+  }
+
+  @include tablet {
+    .flex-md-#{$direction} {
+      flex-direction: $direction;
+    }
+  }
+}
+
+@each $key, $value in $justify-content {
+  .justify-content-#{$key} {
+    justify-content: $value;
+  }
+
+  @include mobile {
+    .justify-content-sm-#{$key} {
+      justify-content: $value;
+    }
+  }
+
+  @include tablet {
+    .justify-content-md-#{$key} {
+      justify-content: $value;
+    }
+  }
+}
+
+@each $key, $value in $align-items {
+  .align-items-#{$key} {
+    align-items: $value;
+  }
+
+  @include mobile {
+    .align-items-sm-#{$key} {
+      align-items: $value;
+    }
+  }
+
+  @include tablet {
+    .align-items-md-#{$key} {
+      align-items: $value;
+    }
+  }
+}
+
+// Grid system
+.row {
+  --gutter-x: $gutter-x;
+  --gutter-y: $gutter-y;
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: calc(-1 * var(--gutter-x));
+  margin-right: calc(-1 * var(--gutter-x));
+  padding: var(--gutter-x);
+}
+
+@for $i from 0 through 6 {
+  .gx-#{$i} {
+    --gutter-x: calc(calc(#{$i} * 0.5) * 1rem);
+  }
+  .gy-#{$i} {
+    --gutter-y: calc(calc(#{$i} * 0.5) * 1rem);
+  }
+
+  @include mobile {
+    .gx-sm-#{$i} {
+      --gutter-x: calc(calc(#{$i} * 0.5) * 1rem);
+    }
+    .gy-sm-#{$i} {
+      --gutter-y: calc(calc(#{$i} * 0.5) * 1rem);
+    }
+  }
+
+  @include tablet {
+    .gx-md-#{$i} {
+      --gutter-x: calc(calc(#{$i} * 0.5) * 1rem);
+    }
+    .gy-md-#{$i} {
+      --gutter-y: calc(calc(#{$i} * 0.5) * 1rem);
+    }
+  }
+}
+
+.col-0 {
+  display: none;
+}
+.col-fill {
+  width: unset !important;
+  max-width: unset !important;
+  flex-grow: 1;
+}
+
+@include mobile {
+  .col-sm-0 {
+    display: none;
+  }
+  .col-sm-fill {
+    width: unset !important;
+    max-width: unset !important;
+    flex-grow: 1;
+  }
+}
+@include tablet {
+  .col-md-0 {
+    display: none;
+  }
+  .col-md-fill {
+    width: unset !important;
+    max-width: unset !important;
+    flex-grow: 1;
+  }
+}
+
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    width: ($i * 100 / 12) * 1%;
+    max-width: ($i * 100 / 12) * 1%;
+    padding-left: var(--gutter-x);
+    padding-right: var(--gutter-x);
+    padding-top: var(--gutter-y);
+    padding-bottom: var(--gutter-y);
+  }
+
+  @include tablet {
+    .col-md-#{$i} {
+      width: ($i * 100 / 12) * 1%;
+      max-width: ($i * 100 / 12) * 1%;
+      padding-left: var(--gutter-x);
+      padding-right: var(--gutter-x);
+      padding-top: var(--gutter-y);
+      padding-bottom: var(--gutter-y);
+    }
+  }
+
+  @include mobile {
+    .col-sm-#{$i} {
+      width: ($i * 100 / 12) * 1%;
+      max-width: ($i * 100 / 12) * 1%;
+      padding-left: var(--gutter-x);
+      padding-right: var(--gutter-x);
+      padding-top: var(--gutter-y);
+      padding-bottom: var(--gutter-y);
+    }
+  }
+}
+
+// Spacing
+@for $i from 0 through 6 {
+  // Margin
+  .mt-#{$i} {
+    margin-top: $i * 0.5 + rem;
+  }
+  .mb-#{$i} {
+    margin-bottom: $i * 0.5 + rem;
+  }
+  .ml-#{$i} {
+    margin-left: $i * 0.5 + rem;
+  }
+  .mr-#{$i} {
+    margin-right: $i * 0.5 + rem;
+  }
+  .mx-#{$i} {
+    margin-inline: $i * 0.5 + rem;
+  }
+  .my-#{$i} {
+    margin-block: $i * 0.5 + rem;
+  }
+
+  // Padding
+  .pt-#{$i} {
+    padding-top: $i * 0.5 + rem;
+  }
+  .pb-#{$i} {
+    padding-bottom: $i * 0.5 + rem;
+  }
+  .pl-#{$i} {
+    padding-left: $i * 0.5 + rem;
+  }
+  .pr-#{$i} {
+    padding-right: $i * 0.5 + rem;
+  }
+  .px-#{$i} {
+    padding-inline: $i * 0.5 + rem;
+  }
+  .py-#{$i} {
+    padding-block: $i * 0.5 + rem;
+  }
+}
+
+// Styles for text
+// left, center, right
+@each $var in $text-align {
+  .text-#{$var} {
+    text-align: $var;
+  }
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+.capitalized {
+  text-transform: capitalized;
+}
+
+// Styles color
+@each $name, $color in $colors {
+  .bg-#{$name} {
+    background-color: $color;
+  }
+
+  .cl-#{$name} {
+    color: $color;
+  }
+}
+
+// Styles Font size
+@each $size in $font-size {
+  .fz-#{$size} {
+    font-size: $size + px;
+  }
+}
+
+.bold {
+  font-weight: bold;
+}

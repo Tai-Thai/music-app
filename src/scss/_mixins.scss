@@ -1,0 +1,14 @@
+@use 'sass:map';
+@use './_variables' as *;
+
+@mixin mobile {
+  @media (max-width: map.get($breakpoints, 'sm')) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: map.get($breakpoints, 'md')) {
+    @content;
+  }
+}

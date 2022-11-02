@@ -1,0 +1,19 @@
+@use '../../index.scss' as *;
+
+.wrapper {
+  height: $nav-height;
+}
+
+.search-icon {
+  svg {
+    width: 16px;
+  }
+}
+
+.search-field {
+  font-size: 1.4rem;
+  color: $light;
+  background-color: transparent;
+  outline: none;
+  border: none;
+}
