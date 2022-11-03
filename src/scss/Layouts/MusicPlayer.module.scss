@@ -1,0 +1,121 @@
+@use '../index.scss' as *;
+
+.wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(29, 33, 35, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+
+  .thumbnail {
+    width: 49px;
+    border-radius: 14px;
+  }
+
+  .duration-bar {
+    --duration: 0;
+    position: relative;
+    width: 100%;
+    background-image: linear-gradient(to right, $secondary, $secondary);
+    background-size: var(--duration) 100%;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    height: 4px;
+    outline: none;
+    cursor: pointer;
+
+    transition: all 450ms ease-out;
+    -webkit-appearance: none;
+    appearance: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: var(--duration);
+      transform: translate(-50%, -50%);
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      border: 1.5px solid $white;
+      transition: all 50ms ease-out;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: var(--duration);
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      transition: all 50ms ease-out;
+      background-color: $secondary;
+    }
+
+    &:hover::before {
+      width: 13px;
+      height: 13px;
+      border: 2px solid $light;
+      box-shadow: 0 0 15px $secondary;
+    }
+
+    &::-webkit-slider-thumb {
+      $size: 0px;
+      -webkit-appearance: none;
+      appearance: none;
+      width: $size;
+      height: $size;
+      background: transparent;
+    }
+  }
+}
+
+.control-btn {
+  width: 16px;
+  cursor: pointer;
+}
+
+.play-btn {
+  width: 25px;
+  height: 25px;
+  box-shadow: 0px 0px 18px rgba(255, 255, 255, 0.3);
+
+  .control-btn {
+    width: 8.5px;
+  }
+}
+
+.volume-icon {
+  width: 18px;
+}
+
+.volume-bar.duration-bar {
+  height: 3px;
+  &::after {
+    width: 7px;
+    height: 7px;
+  }
+  &::before {
+    width: 4px;
+    height: 4px;
+  }
+  &:hover::before {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::after,
+  &::before {
+    display: none;
+    // opacity: 0;
+  }
+  &:hover::after,
+  &:hover::before {
+    display: block;
+    // opacity: 1;
+  }
+}

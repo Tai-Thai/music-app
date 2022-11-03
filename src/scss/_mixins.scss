@@ -12,3 +12,46 @@
     @content;
   }
 }
+
+@mixin transition($time: 0.4s, $timing-function: ease) {
+  transition: all $time $timing-function;
+}
+
+// Margin of children Flexbox
+@mixin gutterFlex($direction) {
+  @if $direction == column {
+    & > *:not(:first-child) {
+      margin-top: var(--gutter-y);
+    }
+    & > *:not(:last-child) {
+      margin-bottom: var(--gutter-y);
+    }
+    & > .d-flex.flex-#{$direction}:not(:first-child) {
+      margin-top: var(--gutter-y);
+    }
+    & > .d-flex.flex-#{$direction}:not(:last-child) {
+      margin-bottom: var(--gutter-y);
+    }
+  } @else if $direction == column-reverse {
+    & > *:not(:last-child) {
+      margin-top: var(--gutter-y);
+    }
+    & > *:not(:first-child) {
+      margin-bottom: var(--gutter-y);
+    }
+  } @else if $direction == row {
+    & > *:not(:first-child) {
+      margin-left: var(--gutter-x);
+    }
+    & > *:not(:last-child) {
+      margin-right: var(--gutter-x);
+    }
+  } @else {
+    & > *:not(:last-child) {
+      margin-left: var(--gutter-x);
+    }
+    & > *:not(:first-child) {
+      margin-right: var(--gutter-x);
+    }
+  }
+}

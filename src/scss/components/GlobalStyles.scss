@@ -13,6 +13,8 @@ html {
 body {
   font-family: 'Quicksand', sans-serif;
   font-size: 1.6rem;
+  background-color: $dark;
+  color: $light;
 }
 
 ul,
@@ -55,9 +57,65 @@ img {
   }
 }
 
+// Gutter
+@for $i from 0 through 6 {
+  .gx-grid-#{$i} {
+    --gutter-grid-x: calc(calc(#{$i} * 0.5) * 1rem) !important;
+  }
+  .gy-grid-#{$i} {
+    --gutter-grid-y: calc(calc(#{$i} * 0.5) * 1rem) !important;
+  }
+
+  @include mobile {
+    .gx-grid-sm-#{$i} {
+      --gutter-grid-x: calc(calc(#{$i} * 0.5) * 1rem) !important;
+    }
+    .gy-grid-sm-#{$i} {
+      --gutter-grid-y: calc(calc(#{$i} * 0.5) * 1rem) !important;
+    }
+  }
+
+  @include tablet {
+    .gx-grid-md-#{$i} {
+      --gutter-grid-x: calc(calc(#{$i} * 0.5) * 1rem) !important;
+    }
+    .gy-grid-md-#{$i} {
+      --gutter-grid-y: calc(calc(#{$i} * 0.5) * 1rem) !important;
+    }
+  }
+}
+@for $i from 0 through 6 {
+  .gx-#{$i} {
+    --gutter-x: calc(calc(#{$i} * 0.5) * 1rem) !important;
+  }
+  .gy-#{$i} {
+    --gutter-y: calc(calc(#{$i} * 0.5) * 1rem) !important;
+  }
+
+  @include mobile {
+    .gx-sm-#{$i} {
+      --gutter-x: calc(calc(#{$i} * 0.5) * 1rem) !important;
+    }
+    .gy-sm-#{$i} {
+      --gutter-y: calc(calc(#{$i} * 0.5) * 1rem) !important;
+    }
+  }
+
+  @include tablet {
+    .gx-md-#{$i} {
+      --gutter-x: calc(calc(#{$i} * 0.5) * 1rem) !important;
+    }
+    .gy-md-#{$i} {
+      --gutter-y: calc(calc(#{$i} * 0.5) * 1rem) !important;
+    }
+  }
+}
 // Flexbox
 .d-flex {
+  // --gutter-x: 0;
+  // --gutter-y: 0;
   display: flex;
+  @include gutterFlex(row);
 }
 
 .flex-wrap {
@@ -79,16 +137,19 @@ img {
 @each $direction in $flex-direction {
   .flex-#{$direction} {
     flex-direction: $direction;
+    @include gutterFlex($direction);
   }
   @include mobile {
     .flex-sm-#{$direction} {
       flex-direction: $direction;
+      @include gutterFlex($direction);
     }
   }
 
   @include tablet {
     .flex-md-#{$direction} {
       flex-direction: $direction;
+      @include gutterFlex($direction);
     }
   }
 }
@@ -130,8 +191,16 @@ img {
 }
 
 // Spacing
-@for $i from 0 through 6 {
+.m-auto {
+  margin: auto;
+}
+
+@for $i from -6 through 6 {
   // Margin
+  .m-#{$i} {
+    margin: $i * 0.5 + rem;
+  }
+
   .mt-#{$i} {
     margin-top: $i * 0.5 + rem;
   }
@@ -152,6 +221,10 @@ img {
   }
 
   // Padding
+  .p-#{$i} {
+    padding: $i * 0.5 + rem;
+  }
+
   .pt-#{$i} {
     padding-top: $i * 0.5 + rem;
   }
@@ -207,4 +280,30 @@ img {
 
 .bold {
   font-weight: bold;
+}
+
+// More
+.w-fit {
+  width: fit-content;
+}
+
+.h-fit {
+  height: fit-content;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+.h-100 {
+  height: 100% !important;
+}
+
+.rounded {
+  border-radius: 999px;
+}
+
+@for $i from 1 through 4 {
+  .op-#{$i} {
+    opacity: $i * 0.25;
+  }
 }

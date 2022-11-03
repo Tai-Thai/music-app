@@ -1,0 +1,17 @@
+@use '../index.scss' as *;
+
+.nav-link {
+  width: 24px;
+  color: $light;
+  opacity: 0.25;
+  @include transition;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.active {
+    color: $secondary;
+    opacity: 1;
+  }
+}
