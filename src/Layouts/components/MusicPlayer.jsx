@@ -1,8 +1,9 @@
 import React from 'react';
-import { Container, Grid, Col, Flexbox } from '~/components/Ui';
+import { Container, Grid, Col, Flexbox, Text } from '~/components/Ui';
 import { classNames } from '~/utils';
 import styles from '~/scss/layouts/MusicPlayer.module.scss';
 import { NextIcon, PauseIcon, PreviousIcon, RepeatOneIcon, ShuffleIcon, VolumeIcon } from '~/components/Icons';
+import { Thumbnail } from '~/components';
 const cx = classNames.bind(styles);
 
 function MusicPlayer() {
@@ -26,10 +27,33 @@ function MusicPlayer() {
                     className={cx('thumbnail')}
                   />
                   <span>
-                    <h4 className={cx('bold', 'fz-14', 'cl-white')}>Seasons in</h4>
-                    <span className={cx('bold', 'fz-10', 'cl-white', 'op-2')}>James</span>
+                    <Text fz={14} tagName={'h4'} className={cx('cl-white')}>
+                      Seasons in
+                    </Text>
+                    <Text fz={10} bold className={cx('cl-white', 'op-2')}>
+                      James
+                    </Text>
                   </span>
                 </Flexbox>
+
+                {/* <Grid alignCenter gx={1} className='align-items-center'>
+                  <Col lg={5}>
+                    <Thumbnail
+                      className={cx('thumbnail2')}
+                      src='https://photo-resize-zmp3.zmdcdn.me/w94_r1x1_webp/cover/7/e/3/f/7e3f46007388adc8f25eead90b92bb07.jpg'
+                    />
+                  </Col>
+                  <Col lg={'fill'} className={'align-items-center'}>
+                    <span>
+                      <Text fz={14} tagName={'h4'} className={cx('cl-white')}>
+                        Seasons in
+                      </Text>
+                      <Text fz={10} bold className={cx('cl-white', 'op-2')}>
+                        James
+                      </Text>
+                    </span>
+                  </Col>
+                </Grid> */}
               </Col>
               <Col lg={'fill'}>
                 <Flexbox column alignCenter justifyBetween gy={3} className={cx('h-100')}>
@@ -44,8 +68,7 @@ function MusicPlayer() {
                   </Flexbox>
                   <input
                     type='range'
-                    name=''
-                    step='0'
+                    step='1'
                     min='0'
                     max='100'
                     defaultValue={0}
@@ -57,7 +80,14 @@ function MusicPlayer() {
               <Col lg={2}>
                 <Flexbox gx={1} alignCenter>
                   <VolumeIcon className={cx('volume-icon')} />
-                  <input type='range' name='' id='' className={cx('duration-bar', 'volume-bar')} onChange={handleInputRangeChange} />
+                  <input
+                    type='range'
+                    step='1'
+                    min='0'
+                    max='100'
+                    className={cx('duration-bar', 'volume-bar')}
+                    onChange={handleInputRangeChange}
+                  />
                 </Flexbox>
               </Col>
             </Grid>

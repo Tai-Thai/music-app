@@ -10,7 +10,7 @@ function Header() {
   return (
     <div>
       <Container>
-        <Grid className={`align-items-center text-center ${cx('wrapper')}`}>
+        <Grid className={`align-items-center ${cx('wrapper')}`}>
           <Col lg={1}>
             <Logo className={cx('logo')} />
           </Col>

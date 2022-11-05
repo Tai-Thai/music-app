@@ -1,0 +1,47 @@
+@use '../../index.scss' as *;
+
+.banner-wrapper {
+  position: relative;
+  .banner {
+    height: 373px;
+    object-fit: cover;
+    border-radius: 40px;
+    z-index: 2;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 80%;
+    background: #7a9096;
+    border-radius: 10%;
+    // mix-blend-mode: color-dodge;
+    opacity: 0.35;
+    filter: blur(65px);
+  }
+}
+
+// Chart card
+
+.chart-card {
+  border-radius: 20px;
+}
+
+// List of Songs
+
+.container-songs {
+  overflow: hidden;
+}
+
+.list-songs {
+  overflow: auto;
+}
+
+// List Item
+.song-item {
+  min-width: 13%;
+  max-width: 20%;
+}

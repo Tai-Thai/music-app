@@ -1,9 +1,13 @@
 @use '../index.scss' as *;
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap');
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
 
 html {
@@ -13,6 +17,7 @@ html {
 body {
   font-family: 'Quicksand', sans-serif;
   font-size: 1.6rem;
+  font-weight: 300;
   background-color: $dark;
   color: $light;
 }
@@ -245,21 +250,6 @@ img {
   }
 }
 
-// Styles for text
-// left, center, right
-@each $var in $text-align {
-  .text-#{$var} {
-    text-align: $var;
-  }
-}
-
-.uppercase {
-  text-transform: uppercase;
-}
-.capitalized {
-  text-transform: capitalized;
-}
-
 // Styles color
 @each $name, $color in $colors {
   .bg-#{$name} {
@@ -269,17 +259,6 @@ img {
   .cl-#{$name} {
     color: $color;
   }
-}
-
-// Styles Font size
-@each $size in $font-size {
-  .fz-#{$size} {
-    font-size: $size + px;
-  }
-}
-
-.bold {
-  font-weight: bold;
 }
 
 // More

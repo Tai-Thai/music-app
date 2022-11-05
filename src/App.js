@@ -2,7 +2,7 @@ import { Col, Container } from './components/Ui';
 import { Route, Routes } from 'react-router-dom';
 import { publishRoutes } from './routers';
 import { Fragment } from 'react';
-import { DefaultLayout } from './Layouts';
+import { DefaultLayout } from './layouts';
 import './App.scss';
 
 function App() {

@@ -1,0 +1,27 @@
+@use '../../index.scss' as *;
+
+// Styles for text
+// left, center, right
+@each $var in $text-align {
+  .text-#{$var} {
+    text-align: $var;
+  }
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+.capitalized {
+  text-transform: capitalized;
+}
+
+// Styles Font size
+@each $size in $font-size {
+  .fz-#{$size} {
+    font-size: $size + px;
+  }
+}
+
+.bold {
+  font-weight: bold;
+}

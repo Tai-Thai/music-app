@@ -5,23 +5,31 @@ import styles from '~/scss/components/Ui/Grid.module.scss';
 
 const cx = classNames.bind(styles);
 
-export function Grid({ children, className, gx, gy, column = false }) {
+export function Grid({ children, className, gx, gy, column = false, ...props }) {
   const _className = cx('row', className || '', `gx-grid-${gx || 3}`, {
     [`gy-grid-${gy}`]: gy,
     [`grid-column`]: column
   });
 
-  return <div className={_className}>{children}</div>;
+  return (
+    <div className={_className} {...props}>
+      {children}
+    </div>
+  );
 }
 
-export function Col({ children, className, sm, md, lg }) {
+export function Col({ children, className, sm, md, lg, ...props }) {
   const _className = cx(className || '', {
     [`col-sm-${sm}`]: sm,
     [`col-md-${md}`]: md,
     [`col-${lg}`]: lg
   });
 
-  return <div className={_className}>{children}</div>;
+  return (
+    <div className={_className} {...props}>
+      {children}
+    </div>
+  );
 }
 
 // [0,..,6] array gutter css - ex: gutter-0, gutter-1, gutter-2, gutter-6

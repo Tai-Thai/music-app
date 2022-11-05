@@ -8,16 +8,21 @@
   background: rgba(29, 33, 35, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
+  z-index: 99;
 
   .thumbnail {
     width: 49px;
     border-radius: 14px;
+  }
+  .thumbnail2 {
+    border-radius: 28%;
   }
 
   .duration-bar {
     --duration: 0;
     position: relative;
     width: 100%;
+    background-color: rgba($white, 0.04);
     background-image: linear-gradient(to right, $secondary, $secondary);
     background-size: var(--duration) 100%;
     background-repeat: no-repeat;
@@ -61,6 +66,10 @@
       height: 13px;
       border: 2px solid $light;
       box-shadow: 0 0 15px $secondary;
+    }
+
+    &:hover {
+      background-color: rgba($white, 0.1);
     }
 
     &::-webkit-slider-thumb {

@@ -11,7 +11,7 @@ function Sidebar() {
   return (
     <Flexbox column gy={2}>
       <div>
-        <Flexbox gy={4} column alignCenter className={`bg-dark-alt px-3 py-5 rounded w-fit m-auto`}>
+        <Flexbox gy={3} column alignCenter className={`bg-dark-alt px-3 py-5 rounded w-fit m-auto`}>
           <NavLink to={`/`} className={({ isActive }) => `${cx('nav-link', { active: isActive })} `}>
             <HomeIcon />
           </NavLink>
@@ -28,7 +28,7 @@ function Sidebar() {
       </div>
 
       <div>
-        <Flexbox gy={4} column alignCenter className={`bg-dark-alt px-3 py-5 rounded w-fit m-auto`}>
+        <Flexbox gy={3} column alignCenter className={`bg-dark-alt px-3 py-5 rounded w-fit m-auto`}>
           <NavLink to={`/me`} className={({ isActive }) => `${cx('nav-link', { active: isActive })} `}>
             <UserIcon />
           </NavLink>

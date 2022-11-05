@@ -18,7 +18,8 @@ export const Flexbox = ({
   justifyAround = false,
   justifyEvenly = false,
   gx,
-  gy
+  gy,
+  ...props
 }) => {
   // const _className = className || '';
   const _justify = checkProps(
@@ -47,11 +48,15 @@ export const Flexbox = ({
     [_alignItems]: _alignItems,
     [_direction]: _direction,
     [_wrap]: _wrap,
-    [`gx-${gx}`]: gx,
-    [`gy-${gy}`]: gy
+    [`gx-${gx}`]: gx == 0 ? true : gx,
+    [`gy-${gy}`]: gy == 0 ? true : gy
   });
 
-  return <div className={_className}>{children}</div>;
+  return (
+    <div className={_className} {...props}>
+      {children}
+    </div>
+  );
 };
 
 const checkProps = (...arrProps) => {
