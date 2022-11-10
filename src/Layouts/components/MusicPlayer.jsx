@@ -60,7 +60,7 @@ function MusicPlayer() {
                   <Flexbox gx={4}>
                     <ShuffleIcon className={cx('control-btn', 'cl-white')} />
                     <PreviousIcon className={cx('control-btn', 'cl-white')} />
-                    <Flexbox alignCenter justifyCenter className={cx('play-btn', 'rounded', 'bg-secondary')}>
+                    <Flexbox alignCenter justifyCenter className={cx('play-btn', 'rounded', 'bg-secondary', 'pointer')}>
                       <PauseIcon className={cx('control-btn', 'cl-white')} />
                     </Flexbox>
                     <NextIcon className={cx('control-btn', 'cl-white')} />

@@ -1,13 +1,5 @@
 @use '../../index.scss' as *;
 
-// Styles for text
-// left, center, right
-@each $var in $text-align {
-  .text-#{$var} {
-    text-align: $var;
-  }
-}
-
 .uppercase {
   text-transform: uppercase;
 }
@@ -24,4 +16,14 @@
 
 .bold {
   font-weight: bold;
+}
+
+@for $i from 1 through 6 {
+  .max-line-#{$i} {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $i;
+    -webkit-box-orient: vertical;
+  }
 }

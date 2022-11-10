@@ -6,12 +6,15 @@ import { HeartIcon } from './Icons';
 
 const cx = classNames.bind(styles);
 
-const Favorites = ({ className, activeClass, active = false, ...props }) => {
-  const _classActive = cx({ active, [activeClass || '']: active });
+const Favorites = ({ className, activeClass, active = false, border = true, ...props }) => {
+  const _classActive = cx({ active });
   return (
-    <div className={cx('wrapper', className)}>
+    <div
+      className={cx('wrapper', className, { [activeClass || '']: active }, 'd-flex align-items-center justify-content-center')}
+      {...props}
+    >
       <HeartIcon className={cx('favorites', _classActive)} />
-      <span className={cx('favorites-border', _classActive)} {...props}></span>
+      {border && <span className={cx('favorites-border', _classActive)}></span>}
     </div>
   );
 };

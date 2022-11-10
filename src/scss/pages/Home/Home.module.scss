@@ -1,5 +1,13 @@
 @use '../../index.scss' as *;
 
+.top-container {
+  & > * {
+    height: 375px;
+  }
+  // max-height: 375px;
+  // overflow: hidden;
+}
+
 .banner-wrapper {
   position: relative;
   .banner {
@@ -24,10 +32,59 @@
   }
 }
 
+.ranking-content {
+  overflow: auto;
+
+  // flex-wrap: nowrap;
+  // height: 69px;
+
+  // &:first-child {
+  //   .top-index {
+  //     font-size: 2rem;
+  //     color: $primary;
+  //   }
+  // }
+}
+
 // Chart card
+
+.chart-card-grid {
+  flex-wrap: nowrap;
+  height: 69px;
+}
 
 .chart-card {
   border-radius: 20px;
+  &:nth-child(1) {
+    .top-index {
+      -webkit-text-stroke: 1px #4a90e2;
+      font-size: 2rem;
+      color: rgba(74, 144, 226, 0);
+      font-weight: bold;
+    }
+  }
+  &:nth-child(2) {
+    .top-index {
+      -webkit-text-stroke: 1px #50e3c2;
+      font-size: 1.8rem;
+      color: rgba(74, 144, 226, 0);
+      font-weight: bold;
+    }
+  }
+  &:nth-child(3) {
+    .top-index {
+      -webkit-text-stroke: 1px #e35050;
+      font-size: 1.6rem;
+      color: rgba(74, 144, 226, 0);
+      font-weight: bold;
+    }
+  }
+}
+
+.favorites {
+  svg {
+    width: 15.5px;
+  }
 }
 
 // List of Songs
@@ -43,5 +100,5 @@
 // List Item
 .song-item {
   min-width: 13%;
-  max-width: 20%;
+  max-width: 13%;
 }

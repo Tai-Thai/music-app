@@ -1,17 +1,22 @@
 // import { DefaultLayout } from '~/components/Layout';
-import { Home, Collection, Profile } from '~/pages';
+import { routes } from '~/configs';
+import { Home, Collection, Profile, Playlist } from '~/pages';
 
 export const publishRoutes = [
   {
-    path: '/',
+    path: routes.home,
     component: Home
   },
   {
-    path: '/collection',
+    path: routes.collection,
     component: Collection
   },
   {
-    path: '/me',
+    path: routes.playlist,
+    component: Playlist
+  },
+  {
+    path: routes.profile,
     component: Profile
   }
 ];

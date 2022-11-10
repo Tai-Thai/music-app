@@ -203,50 +203,50 @@ img {
 @for $i from -6 through 6 {
   // Margin
   .m-#{$i} {
-    margin: $i * 0.5 + rem;
+    margin: $i * 0.5 + rem !important;
   }
 
   .mt-#{$i} {
-    margin-top: $i * 0.5 + rem;
+    margin-top: $i * 0.5 + rem !important;
   }
   .mb-#{$i} {
-    margin-bottom: $i * 0.5 + rem;
+    margin-bottom: $i * 0.5 + rem !important;
   }
   .ml-#{$i} {
-    margin-left: $i * 0.5 + rem;
+    margin-left: $i * 0.5 + rem !important;
   }
   .mr-#{$i} {
-    margin-right: $i * 0.5 + rem;
+    margin-right: $i * 0.5 + rem !important;
   }
   .mx-#{$i} {
-    margin-inline: $i * 0.5 + rem;
+    margin-inline: $i * 0.5 + rem !important;
   }
   .my-#{$i} {
-    margin-block: $i * 0.5 + rem;
+    margin-block: $i * 0.5 + rem !important;
   }
 
   // Padding
   .p-#{$i} {
-    padding: $i * 0.5 + rem;
+    padding: $i * 0.5 + rem !important;
   }
 
   .pt-#{$i} {
-    padding-top: $i * 0.5 + rem;
+    padding-top: $i * 0.5 + rem !important;
   }
   .pb-#{$i} {
-    padding-bottom: $i * 0.5 + rem;
+    padding-bottom: $i * 0.5 + rem !important;
   }
   .pl-#{$i} {
-    padding-left: $i * 0.5 + rem;
+    padding-left: $i * 0.5 + rem !important;
   }
   .pr-#{$i} {
-    padding-right: $i * 0.5 + rem;
+    padding-right: $i * 0.5 + rem !important;
   }
   .px-#{$i} {
-    padding-inline: $i * 0.5 + rem;
+    padding-inline: $i * 0.5 + rem !important;
   }
   .py-#{$i} {
-    padding-block: $i * 0.5 + rem;
+    padding-block: $i * 0.5 + rem !important;
   }
 }
 
@@ -262,6 +262,15 @@ img {
 }
 
 // More
+
+// Styles for text
+// left, center, right
+@each $var in $text-align {
+  .text-#{$var} {
+    text-align: $var;
+  }
+}
+// width and height
 .w-fit {
   width: fit-content;
 }
@@ -279,6 +288,16 @@ img {
 
 .rounded {
   border-radius: 999px;
+}
+
+// cursor
+.pointer {
+  cursor: pointer;
+}
+
+// position
+.relative {
+  position: relative;
 }
 
 @for $i from 1 through 4 {

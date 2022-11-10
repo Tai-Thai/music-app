@@ -17,6 +17,8 @@ export const Flexbox = ({
   justifyBetween = false,
   justifyAround = false,
   justifyEvenly = false,
+  justifyEnd = false,
+  justifyStart = false,
   gx,
   gy,
   ...props
@@ -26,7 +28,9 @@ export const Flexbox = ({
     { check: justifyCenter, result: `justify-content-center` },
     { check: justifyBetween, result: `justify-content-between` },
     { check: justifyAround, result: `justify-content-around` },
-    { check: justifyEvenly, result: `justify-content-evenly` }
+    { check: justifyEvenly, result: `justify-content-evenly` },
+    { check: justifyEnd, result: `justify-content-end` },
+    { check: justifyStart, result: `justify-content-start` }
   );
 
   const _alignItems = checkProps(
@@ -79,5 +83,7 @@ Flexbox.propTypes = {
   alignEnd: PropTypes.bool,
   justifyBetween: PropTypes.bool,
   justifyAround: PropTypes.bool,
-  justifyEvenly: PropTypes.bool
+  justifyEvenly: PropTypes.bool,
+  justifyEnd: PropTypes.bool,
+  justifyStart: PropTypes.bool
 };

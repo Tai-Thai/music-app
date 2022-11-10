@@ -29,7 +29,9 @@ $justify-content: (
   center: center,
   around: space-around,
   evenly: space-evenly,
-  between: space-between
+  between: space-between,
+  end: flex-end,
+  start: flex-start
 );
 $align-items: (
   center: center,
@@ -49,7 +51,8 @@ $colors: (
   dark-alt: $dark-alt,
   primary: $primary,
   secondary: $secondary,
-  white: $white
+  white: $white,
+  alt: $alt
 );
 
 // Font Size

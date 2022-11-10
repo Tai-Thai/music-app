@@ -6,8 +6,8 @@ import styles from '~/scss/components/Ui/Grid.module.scss';
 const cx = classNames.bind(styles);
 
 export function Grid({ children, className, gx, gy, column = false, ...props }) {
-  const _className = cx('row', className || '', `gx-grid-${gx || 3}`, {
-    [`gy-grid-${gy}`]: gy,
+  const _className = cx('row', className || '', `gx-grid-${gx == 0 ? 0 : gx || 3}`, {
+    [`gy-grid-${gy == 0 ? 0 : gy}`]: gy,
     [`grid-column`]: column
   });
 

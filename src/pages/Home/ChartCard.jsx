@@ -7,33 +7,30 @@ import { Favorites, Thumbnail } from '~/components';
 
 const cx = classNames.bind(styles);
 
-const ChartCard = (props) => {
+const ChartCard = ({ songKey, title, thumbnail, artists, position }) => {
   const [favorites, setFavorites] = useState(false);
 
   return (
     <div className={cx('p-3 bg-dark-alt', 'chart-card')}>
-      <Grid gx={1} className={cx('align-items-center')}>
+      <Grid gx={1} className={cx('chart-card-grid', 'align-items-center')}>
         <Col lg={3} className='mr-1'>
-          <div>
-            <Thumbnail src={'https://wallpapers.oceanofwallpapers.com/wallpapers/previews/wallpaper-oxl6pp-126036-Preview.webp'} />
-          </div>
+          <Thumbnail src={thumbnail} />
         </Col>
-        <Col lg={'fill'}>
+        <Col lg={7} className={'h-100'}>
           <Flexbox column justifyBetween gy={0} className={cx('h-100')}>
-            <Text fz={17}>Golden age of 80s</Text>
-            <Text fz={12} className={cx('op-2')}>
-              Sean swadder
+            <Text maxLine={1} fz={17}>
+              {title}
             </Text>
-            <Text fz={12}>2:34:45</Text>
+            <Text maxLine={1} fz={12} className={cx('op-2')}>
+              {artists[0] ? artists[0].name : ''}
+            </Text>
+            <Text fz={12} className={cx('top-index')}>
+              Top {position}
+            </Text>
           </Flexbox>
         </Col>
         <Col lg={2}>
-          {/* <div style={{ position: 'relative' }}>
-            <HeartIcon className={cx('favorites')} />
-            <span className={cx('favorites-border')}></span>
-          </div> */}
-
-          <Favorites active={favorites} onClick={() => setFavorites(!favorites)} />
+          <Favorites active={favorites} className={cx('favorites')} onClick={() => setFavorites(!favorites)} />
         </Col>
       </Grid>
     </div>

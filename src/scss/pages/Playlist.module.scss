@@ -1,0 +1,51 @@
+@use '../index.scss' as *;
+
+.thumbnail {
+  padding: 44%;
+}
+
+.action-btn {
+  background-color: rgba($white, 0.07);
+  backdrop-filter: blur(5px);
+  transition: all 0.4s;
+  &:hover {
+    background-color: rgba($white, 0.2);
+  }
+  .icon {
+    width: 13.5px;
+  }
+}
+
+.favorites-btn {
+  // width: 40px;
+  & > div {
+    min-width: 13.5px;
+  }
+  svg {
+    min-width: 13.5px;
+  }
+}
+
+.favorites-active {
+  svg {
+    fill: #e5524a !important;
+  }
+}
+
+// Song item
+.song-item-wrapper {
+  background: rgba(51, 55, 59, 0.37);
+  backdrop-filter: blur(5px);
+  /* Note: backdrop-filter has minimal browser support */
+  border-radius: 15px;
+}
+
+.favorites {
+  svg {
+    width: 15.5px;
+  }
+}
+
+.more-vertical-icon {
+  width: 17px;
+}

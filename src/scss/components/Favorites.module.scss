@@ -1,20 +1,18 @@
 @use '../index.scss' as *;
 
 .wrapper {
+  --main-color: $secondary;
   position: relative;
 }
 
 .favorites {
   color: $secondary;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 40%;
+  // max-width: 40%;
   cursor: pointer;
 
   &.active {
     fill: $secondary;
+
     // fill: #e5524a;
     animation: scaleIcon 1.5s linear;
 
@@ -68,21 +66,20 @@
 
 @keyframes scaleIcon {
   0% {
-    transform: translate(-50%, -50%);
     fill: transparent;
   }
 
   30% {
-    transform: translate(-50%, -50%) scale(0.7);
+    transform: scale(0.7);
     fill: transparent;
   }
 
   40% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
     fill: rgba($secondary, 0.8);
   }
   100% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
     fill: $secondary;
   }
 }
