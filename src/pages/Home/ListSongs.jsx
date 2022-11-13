@@ -4,11 +4,12 @@ import { Flexbox, Grid, Col, Text } from '~/components/Ui';
 import { classNames } from '~/utils';
 import styles from '~/scss/pages/Home/Home.module.scss';
 import { Thumbnail } from '~/components';
+import { useDispatch } from 'react-redux';
+import { setCurrentSongId } from '~/features/currentSong/currentSongSlice';
 
 const cx = classNames.bind(styles);
 
 const ListSongs = ({ data, title, ...props }) => {
-  console.log(data);
   const container = useRef();
   const listSongs = useRef();
   useEffect(() => {
@@ -66,34 +67,21 @@ const ListSongs = ({ data, title, ...props }) => {
       </Text>
       <div ref={container} className={cx('container-songs')}>
         <div ref={listSongs} className={cx('list-songs', 'd-flex', 'gx-3')}>
-          {!data ? (
-            <>
-              <SongItem src={'https://m.media-amazon.com/images/I/61bsF-NQA0L._SS500_.jpg'} />
-              <SongItem src={'https://img.pikbest.com/06/13/62/112pIkbEsTdDy.jpg-1.jpg!bw700'} />
-              <SongItem src={'https://intphcm.com/data/upload/1599105042-poster-am-nhac-3.jpg'} />
-              <SongItem src={'https://img.pikbest.com/01/46/14/12mpIkbEsTYq6.jpg-0.jpg!bw700'} />
-              <SongItem src={'https://intmt.vn/wp-content/uploads/2021/05/in-poster-quang-cao-ca-nhac.jpg'} />
-              <SongItem src={'https://i.pinimg.com/564x/08/9f/3b/089f3bf38fe44130207294d9c18cfcf6--edm-music-various-artists.jpg'} />
-              <SongItem src={'https://m.media-amazon.com/images/I/61bsF-NQA0L._SS500_.jpg'} />
-              <SongItem src={'https://m.media-amazon.com/images/I/61bsF-NQA0L._SS500_.jpg'} />
-              <SongItem src={'https://m.media-amazon.com/images/I/61bsF-NQA0L._SS500_.jpg'} />
-              <SongItem src={'https://m.media-amazon.com/images/I/61bsF-NQA0L._SS500_.jpg'} />
-            </>
-          ) : (
-            data?.map((songItem) => {
-              console.log(songItem);
-              return <SongItem {...songItem} />;
-            })
-          )}
+          {data?.map((songItem) => {
+            return <SongItem key={songItem.key || songItem.songKey} songId={songItem.key || songItem.songKey} {...songItem} />;
+          })}
         </div>
       </div>
     </>
   );
 };
 
-const SongItem = ({ thumbnail, thumbURL, title, artists, ...props }) => {
+const SongItem = ({ songId, thumbnail, thumbURL, title, artists, ...props }) => {
+  const dispatch = useDispatch();
+  const handleSetCurrentSong = () => dispatch(setCurrentSongId(songId));
+
   return (
-    <div className={cx('song-item')}>
+    <div className={cx('song-item', 'pointer')} onClick={handleSetCurrentSong}>
       <Flexbox column gx={0}>
         <Thumbnail className={cx('mb-1')} src={thumbnail || thumbURL} />
         <div>

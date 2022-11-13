@@ -12,12 +12,18 @@ function Home() {
   const [data, setData] = useState({});
   const [getDataError, setGetDataError] = useState('error');
   useEffect(() => {
+    console.log('effect HOME===============');
+    console.log({ getDataError: getDataError });
     if (!getDataError.includes('success')) {
       getHome()
         .then((data) => {
           console.log(data);
+          if (data.status === 'error') {
+            // setGetDataError('error' + Date.now());
+            return;
+          }
           setData(data);
-
+          setGetDataError('success');
           // data.song.forEach((item) => {
           //   const results = getSong(item.key).then((data) => console.log(data));
           // });

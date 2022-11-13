@@ -4,14 +4,19 @@ import { Flexbox, Grid, Col, Text } from '~/components/Ui';
 import { classNames } from '~/utils';
 import styles from '~/scss/pages/Home/Home.module.scss';
 import { Favorites, Thumbnail } from '~/components';
+import { useDispatch } from 'react-redux';
+import { setCurrentSongId } from '~/features/currentSong/currentSongSlice';
 
 const cx = classNames.bind(styles);
 
 const ChartCard = ({ songKey, title, thumbnail, artists, position }) => {
   const [favorites, setFavorites] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleSetCurrentSong = () => dispatch(setCurrentSongId(songKey));
 
   return (
-    <div className={cx('p-3 bg-dark-alt', 'chart-card')}>
+    <div className={cx('p-3 bg-dark-alt', 'chart-card')} onClick={handleSetCurrentSong}>
       <Grid gx={1} className={cx('chart-card-grid', 'align-items-center')}>
         <Col lg={3} className='mr-1'>
           <Thumbnail src={thumbnail} />

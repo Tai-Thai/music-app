@@ -3,7 +3,7 @@ import { Favorites, Thumbnail } from '~/components';
 import { Grid, Col, Text, Flexbox } from '~/components/Ui';
 import { classNames } from '~/utils';
 import { AddCollectionIcon, PlayAllIcon } from '~/components/Icons';
-import SongItem, { Test } from './SongItem';
+import SongItem from './SongItem';
 import styles from '~/scss/pages/Playlist.module.scss';
 
 const cx = classNames.bind(styles);
@@ -58,9 +58,6 @@ function Playlist({ setBackgroundImage }) {
           </Flexbox>
         </Col>
       </Grid>
-
-      <Test.Child></Test.Child>
-      <Test.Child2></Test.Child2>
 
       <div className='mt-6'>
         <SongItem />
