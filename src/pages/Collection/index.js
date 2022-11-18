@@ -3,7 +3,7 @@ import { Col, Flexbox, Grid, Text } from '~/components/Ui';
 import { classNames } from '~/utils';
 import styles from '~/scss/pages/Collection.module.scss';
 import { Thumbnail } from '~/components';
-import CollectionItem from './CollectionItem';
+import PlaylistCard from '../../components/PlaylistCard';
 
 const cx = classNames.bind(styles);
 
@@ -19,13 +19,13 @@ function Collection() {
         </div>
       </Flexbox>
       <Grid className='mt-4' gy={3} gx={2}>
-        <CollectionItem />
-        <CollectionItem />
-        <CollectionItem />
-        <CollectionItem />
-        <CollectionItem />
-        <CollectionItem />
-        <CollectionItem />
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
+        <PlaylistCard />
       </Grid>
     </div>
   );

@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+
 export { default as Logo } from './Logo';
 
 export const HomeIcon = ({ className }) => (
@@ -205,8 +207,8 @@ export const AddCollectionIcon = (props) => (
   </svg>
 );
 
-export const MoreVerticalIcon = (props) => (
-  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17' fill='none' {...props}>
+export const MoreVerticalIcon = forwardRef((props, ref) => (
+  <svg ref={ref} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17' fill='none' {...props}>
     <path
       d='M8.25782 8.94595C8.63788 8.94595 8.94598 8.63785 8.94598 8.25779C8.94598 7.87774 8.63788 7.56964 8.25782 7.56964C7.87777 7.56964 7.56967 7.87774 7.56967 8.25779C7.56967 8.63785 7.87777 8.94595 8.25782 8.94595Z'
       stroke='currentColor'
@@ -229,7 +231,7 @@ export const MoreVerticalIcon = (props) => (
       strokeLinejoin='round'
     />
   </svg>
-);
+));
 export const PlayIcon = (props) => (
   <svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' viewBox='0 0 320 512' {...props}>
     <path

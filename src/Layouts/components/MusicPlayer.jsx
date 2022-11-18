@@ -1,41 +1,44 @@
-import React, { useEffect, useRef } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Container, Grid, Col, Flexbox, Text } from '~/components/Ui';
 import { classNames } from '~/utils';
 import styles from '~/scss/layouts/MusicPlayer.module.scss';
 import { NextIcon, PauseIcon, PlayIcon, PreviousIcon, RepeatOneIcon, ShuffleIcon, VolumeIcon } from '~/components/Icons';
 import { Thumbnail } from '~/components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { getLyric, getSong } from '~/api';
 import { seconds2time } from '~/utils';
+import { pushListenedSongs, setIndexCurrentSong } from '~/features/playlist/playlistSlice';
 const cx = classNames.bind(styles);
 
 function MusicPlayer() {
-  const songId = useSelector((state) => state.currentSong.currentSongId);
+  const { currentSongId: songId, indexCurrentSong, playlist, listenedSongs } = useSelector((state) => state.playlist);
+  const dispatch = useDispatch();
+
   const [currentSong, setCurrentSong] = useState({});
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoop, setIsLoop] = useState(false);
   const [error, setError] = useState('error');
   const [muted, setMuted] = useState(false);
+  const [isShuffle, setIsShuffle] = useState(false);
+
   const audioRef = useRef(null);
   const durationBarRef = useRef(null);
   const volumeBarRef = useRef(null);
   const timeLeftRef = useRef(null);
   const timeRightRef = useRef(null);
+  console.log({ songId, indexCurrentSong, playlist, listenedSongs });
+
+  // const arr = useMemo(() => {
+  //   console.log('use memo');
+  //   return [];
+  // }, []);
+  const arr = [];
 
   // animation of time line input type range
   const handleInputRangeAnimation = function (target) {
     target.style.setProperty('--duration', `${target.value}%`);
-  };
-
-  // handle play & pause events
-  const handlePlay = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
   };
 
   // duration bar when drag drop input range
@@ -50,7 +53,6 @@ function MusicPlayer() {
     const target = e.target;
     if (target.duration) {
       const durationPercent = Math.floor((target.currentTime / target.duration) * 100);
-
       // set duration bar value
       durationBarRef.current.value = durationPercent;
       // set animation duration bar
@@ -63,20 +65,58 @@ function MusicPlayer() {
 
   // handle volume slider
   const handleVolumeChange = () => {
+    setMuted(false);
     const volumeValue = volumeBarRef.current.value / 100;
     // set volume value to audio
     audioRef.current.volume = volumeValue;
+    // set muted if volume value = 0
+    if (volumeValue === 0) setMuted(true);
     // handle animation timeline
     handleInputRangeAnimation(volumeBarRef.current);
+  };
+
+  // handle on end song => next song
+  const audioOnEnd = () => {
+    handleNextSong();
+  };
+
+  // handle play & pause events
+  const handlePlay = () => {
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  // handle shuffle
+  const handleShuffle = () => setIsShuffle(!isShuffle);
+
+  // handle previous and next song
+  const handlePreviousSong = () => handleNextAndPrevSong(indexCurrentSong - 1);
+  const handleNextSong = () => handleNextAndPrevSong(indexCurrentSong + 1);
+  // handle next song
+  const handleNextAndPrevSong = (index) => {
+    let nextIndex;
+    if (isShuffle) {
+      do {
+        nextIndex = Math.floor(Math.random() * playlist.songs.length);
+      } while (listenedSongs.includes(nextIndex));
+    } else {
+      nextIndex = index;
+      if (nextIndex > playlist.length) nextIndex = 0;
+      else if (nextIndex < 0) nextIndex = playlist.songs.length;
+    }
+    dispatch(setIndexCurrentSong(nextIndex));
+    dispatch(pushListenedSongs(nextIndex));
   };
 
   // handle loop song
   const handleLoop = () => setIsLoop(!isLoop);
 
   // handle muted
-  const handleMutedChange = () => {
-    setMuted(!muted);
-  };
+  const handleMutedChange = () => setMuted(!muted);
 
   const handleGetCurrentSong = () => {
     getSong(songId)
@@ -87,6 +127,7 @@ function MusicPlayer() {
           return;
         }
         setCurrentSong(data?.song);
+        setIsPlaying(true);
         setError('success');
       })
       .catch((err) => setError('error' + Date.now()));
@@ -100,10 +141,18 @@ function MusicPlayer() {
 
   useEffect(() => {
     console.log({ actions: 'get song', error });
-    handleGetCurrentSong();
-    getLyric().then((data) => console.log({ lyric: data }));
+    if (songId) handleGetCurrentSong();
   }, [songId]);
 
+  useEffect(() => {
+    if (indexCurrentSong === null) return;
+    console.log({ arr });
+    const songs = playlist.songs;
+    setCurrentSong(songs[indexCurrentSong]);
+    setIsPlaying(true);
+  }, [indexCurrentSong]);
+
+  // fix
   useEffect(() => {
     console.log({ actions: 'get song', error });
     if (!error.includes('success')) {
@@ -113,6 +162,7 @@ function MusicPlayer() {
 
   return (
     <div className={cx('wrapper', 'py-5')}>
+      {console.log({ currentSong: currentSong })}
       <Container>
         <Grid>
           <Col lg={1}>
@@ -141,7 +191,7 @@ function MusicPlayer() {
                   </Col>
                   <Col lg={7} className={'align-items-center'}>
                     <span>
-                      <Text fz={14} tagName={'h4'} className={cx('cl-white')}>
+                      <Text fz={14} maxLine={2} tagName={'h4'} className={cx('cl-white')}>
                         {currentSong?.title || ''}
                       </Text>
                       <Text fz={10} bold className={cx('cl-white', 'op-2')}>
@@ -154,8 +204,8 @@ function MusicPlayer() {
               <Col lg={'fill'}>
                 <Flexbox column alignCenter justifyBetween gy={3} className={cx('h-100')}>
                   <Flexbox gx={4}>
-                    <ShuffleIcon className={cx('control-btn', 'cl-white')} />
-                    <PreviousIcon className={cx('control-btn', 'cl-white')} />
+                    <ShuffleIcon className={cx('control-btn', 'cl-white', { active: isShuffle })} onClick={handleShuffle} />
+                    <PreviousIcon className={cx('control-btn', 'cl-white')} onClick={handlePreviousSong} />
                     <Flexbox
                       alignCenter
                       justifyCenter
@@ -168,7 +218,7 @@ function MusicPlayer() {
                         <PauseIcon className={cx('control-btn', 'show-animation', 'cl-white')} />
                       )}
                     </Flexbox>
-                    <NextIcon className={cx('control-btn', 'cl-white')} />
+                    <NextIcon className={cx('control-btn', 'cl-white')} onClick={handleNextSong} />
                     <RepeatOneIcon className={cx('control-btn', 'cl-white', { active: isLoop })} onClick={handleLoop} />
                   </Flexbox>
                   <Grid className={cx('align-items-center w-100')} gx={2}>
@@ -204,11 +254,12 @@ function MusicPlayer() {
                     loop={isLoop}
                     muted={muted}
                     src={
-                      (currentSong?.streamUrls && currentSong?.streamUrls[0].streamUrl) ||
-                      'https://stream.nixcdn.com/NhacCuaTui2026/WaitingForYou-MONOOnionn-7733882.mp3?st=8hRiCvjotE2Zf8nfXqDTTg&e=1668156600&t=1668071682206'
+                      currentSong?.streamUrls?.length
+                        ? currentSong?.streamUrls[0].streamUrl
+                        : 'https://stream.nixcdn.com/NhacCuaTui2026/WaitingForYou-MONOOnionn-7733882.mp3?st=8hRiCvjotE2Zf8nfXqDTTg&e=1668156600&t=1668071682206'
                     }
                     onTimeUpdate={handleTimeUpdate}
-                    // style={{ displaying: 'none' }}
+                    onEnded={audioOnEnd}
                   ></audio>
                 </Flexbox>
               </Col>

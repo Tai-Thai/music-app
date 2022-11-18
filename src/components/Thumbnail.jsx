@@ -5,11 +5,12 @@ import styles from '~/scss/components/Thumbnail.module.scss';
 
 const cx = classNames.bind(styles);
 
-const Thumbnail = ({ children, className, src, ...props }) => {
-  const _className = cx('thumbnail', className);
+const Thumbnail = ({ children, className, src, equalizer = false, ...props }) => {
+  const _className = cx('thumbnail', 'relative', className);
   return (
     <div className={_className} style={{ backgroundImage: `url(${src})` }} {...props}>
       {children}
+      {equalizer && <div className={cx('equalizer')}></div>}
     </div>
   );
 };
@@ -17,7 +18,8 @@ const Thumbnail = ({ children, className, src, ...props }) => {
 Thumbnail.propTypes = {
   children: PropTypes.any,
   className: PropTypes.string,
-  src: PropTypes.string
+  src: PropTypes.string,
+  equalizer: PropTypes.bool
 };
 
 export default Thumbnail;

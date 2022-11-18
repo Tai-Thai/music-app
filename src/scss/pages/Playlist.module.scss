@@ -38,6 +38,10 @@
   backdrop-filter: blur(5px);
   /* Note: backdrop-filter has minimal browser support */
   border-radius: 15px;
+
+  &.active {
+    background-color: $primary;
+  }
 }
 
 .favorites {
@@ -47,5 +51,12 @@
 }
 
 .more-vertical-icon {
-  width: 17px;
+  width: 17px !important;
+}
+
+.song-item-detail {
+  & > * {
+    width: 25%;
+    max-width: 25%;
+  }
 }

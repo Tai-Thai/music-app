@@ -12,7 +12,7 @@ export const publishRoutes = [
     component: Collection
   },
   {
-    path: routes.playlist,
+    path: `${routes.playlist}/:playlistKey`,
     component: Playlist
   },
   {

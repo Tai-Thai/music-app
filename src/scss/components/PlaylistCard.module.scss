@@ -1,0 +1,71 @@
+@use '../index.scss' as *;
+// Playlist card
+.playlist-card-wrapper {
+  width: 20%;
+  max-width: 20%;
+}
+.playlist-card {
+  --like-amounts: 10px;
+  --spacer: 12px;
+  --margin-content-bottom: 20px;
+  height: 234px;
+  border-radius: 10%;
+  overflow: hidden;
+  background-size: 140%;
+  transition: all 0.3s;
+  &:hover {
+    background-size: 150%;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(179.89deg, rgba(0, 0, 0, 0) 0.1%, rgba(15, 18, 19, 0.85) 80.67%);
+    border-radius: inherit;
+  }
+
+  &__content {
+    position: absolute;
+    max-width: 80%;
+    bottom: var(--spacer);
+    left: var(--spacer);
+    transform: translateY(calc(var(--like-amounts) + var(--spacer) + var(--margin-content-bottom)));
+    z-index: 2;
+    transition: all 0.5s;
+
+    .like-amounts {
+      font-size: var(--like-amounts);
+    }
+
+    &-top {
+      margin-bottom: var(--margin-content-bottom);
+    }
+  }
+
+  &__play {
+    position: absolute;
+    bottom: calc(var(--spacer) * 2);
+    right: var(--spacer);
+    opacity: 0;
+    width: 40px;
+    height: 40px;
+    background-color: rgba($secondary, 0.4);
+    z-index: 2;
+    transition: all 0.8s;
+    svg {
+      width: 14px;
+    }
+  }
+}
+
+.playlist-card:hover {
+  .playlist-card__content {
+    transform: translateY(0px);
+  }
+  .playlist-card__play {
+    opacity: 1;
+  }
+}

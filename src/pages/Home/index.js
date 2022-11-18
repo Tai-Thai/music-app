@@ -12,11 +12,10 @@ function Home() {
   const [data, setData] = useState({});
   const [getDataError, setGetDataError] = useState('error');
   useEffect(() => {
-    console.log('effect HOME===============');
-    console.log({ getDataError: getDataError });
     if (!getDataError.includes('success')) {
       getHome()
         .then((data) => {
+          console.log('Home');
           console.log(data);
           if (data.status === 'error') {
             // setGetDataError('error' + Date.now());
@@ -24,10 +23,6 @@ function Home() {
           }
           setData(data);
           setGetDataError('success');
-          // data.song.forEach((item) => {
-          //   const results = getSong(item.key).then((data) => console.log(data));
-          // });
-          // data.top100[0]
         })
         .catch((err) => setGetDataError('error' + Date.now()));
     }
@@ -56,10 +51,9 @@ function Home() {
       </Grid>
 
       <div className={'mt-6'}>
-        {console.log(data)}
-        <ListSongs data={data?.newRelease?.song || []} title={`New Releases`} />
-        <ListSongs data={data?.top100 || []} title={`Top 100`} />
-        <ListSongs data={data?.topic || []} title={`Topic`} />
+        <ListSongs data={data?.newRelease?.song || []} title={`New Releases`} itemType={'song'} />
+        <ListSongs data={data?.top100 || []} title={`Top 100`} itemType={'playlist'} />
+        <ListSongs data={data?.topic || []} title={`Topic`} itemType={'topic'} />
       </div>
     </div>
   );

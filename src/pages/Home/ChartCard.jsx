@@ -5,7 +5,7 @@ import { classNames } from '~/utils';
 import styles from '~/scss/pages/Home/Home.module.scss';
 import { Favorites, Thumbnail } from '~/components';
 import { useDispatch } from 'react-redux';
-import { setCurrentSongId } from '~/features/currentSong/currentSongSlice';
+import { setCurrentSongId } from '~/features/playlist/playlistSlice';
 
 const cx = classNames.bind(styles);
 
