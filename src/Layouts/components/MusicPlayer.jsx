@@ -7,7 +7,7 @@ import { NextIcon, PauseIcon, PlayIcon, PreviousIcon, RepeatOneIcon, ShuffleIcon
 import { Thumbnail } from '~/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { getLyric, getSong } from '~/api';
+import { getLyric, getSong } from '~/apis';
 import { seconds2time } from '~/utils';
 import { pushListenedSongs, setIndexCurrentSong } from '~/features/playlist/playlistSlice';
 const cx = classNames.bind(styles);
@@ -183,7 +183,7 @@ function MusicPlayer() {
                   </span>
                 </Flexbox> */}
 
-                <Grid alignCenter gx={1} className='align-items-center'>
+                <Grid gx={1} className='align-items-center'>
                   <Col lg={5}>
                     <Thumbnail className={cx('thumbnail2', 'relative')} src={currentSong?.thumbnail || currentSong?.thumbURL}>
                       {isPlaying && <div className={cx('equalizer')}></div>}

@@ -1,0 +1,10 @@
+@use '../../index.scss' as *;
+
+// Tooltip
+.tooltip-wrapper {
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  z-index: 999;
+  border-radius: 5px;
+}

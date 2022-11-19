@@ -6,10 +6,11 @@ import { AddCollectionIcon, PlayAllIcon } from '~/components/Icons';
 import SongItem from './SongItem';
 import styles from '~/scss/pages/Playlist.module.scss';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { getPlaylistDetail, getPlaylists, getTopicDetail } from '~/api';
+import { getPlaylistDetail, getPlaylists, getTopicDetail } from '~/apis';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPlaylist } from '~/features/playlist/playlistSlice';
 import PlaylistCard from '~/components/PlaylistCard';
+import { Tippy } from '~/components/Ui/Tippy';
 
 const cx = classNames.bind(styles);
 
@@ -32,7 +33,7 @@ function Playlist({ setBackgroundImage }) {
   const handleRenderData = () => {
     let data = [];
     if (dataType === 'topic') {
-      data = topicData.playlist || [];
+      data = topicData?.playlist || [];
     } else {
       data = playlist?.songs || [];
     }
@@ -106,7 +107,7 @@ function Playlist({ setBackgroundImage }) {
           <Flexbox column justifyEnd className={cx('h-100')}>
             <Flexbox column gy={1}>
               <Text tagName={'h3'} maxLine={2} fz={35} className={'cl-alt'}>
-                {dataType === 'playlist' ? playlist?.title : topicData.title}
+                {dataType === 'playlist' ? playlist?.title : topicData?.title}
               </Text>
               <Text fz={14}>
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione doloribus, nostrum, aut possimus voluptates necessitatibus
@@ -114,10 +115,12 @@ function Playlist({ setBackgroundImage }) {
               <Text fz={14}>{playlist?.songs?.length} songs ~ 16 hrs+</Text>
             </Flexbox>
             <Flexbox className='mt-6'>
-              <div className={cx('action-btn', 'rounded px-3 py-2 d-flex align-items-center justify-content-center mr-2 pointer')}>
-                <PlayAllIcon className={cx('icon', 'cl-secondary', 'mr-2')} />
-                <Text fz={12}>Play all</Text>
-              </div>
+              <Tippy>
+                <div className={cx('action-btn', 'rounded px-3 py-2 d-flex align-items-center justify-content-center mr-2 pointer')}>
+                  <PlayAllIcon className={cx('icon', 'cl-secondary', 'mr-2')} />
+                  <Text fz={12}>Play all</Text>
+                </div>
+              </Tippy>
               <div className={cx('action-btn', 'rounded px-3 py-2 d-flex align-items-center justify-content-center mr-2 pointer')}>
                 <AddCollectionIcon className={cx('icon', 'cl-secondary', 'mr-2')} />
                 <Text fz={12}>Add to collection</Text>

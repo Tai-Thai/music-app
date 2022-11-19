@@ -71,7 +71,7 @@ const checkProps = (...arrProps) => {
 };
 
 Flexbox.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   className: PropTypes.string,
   column: PropTypes.bool,
   columnReverse: PropTypes.bool,
