@@ -14,12 +14,13 @@ function Sidebar() {
     <Flexbox column gy={2}>
       <div>
         <Flexbox gy={3} column alignCenter className={`bg-dark-alt px-3 py-5 rounded w-fit m-auto`}>
-          <Tippy content={'Home'}>
+          <Tippy content={'Home'} placement={`left`}>
             <NavLink to={routes.home} className={({ isActive }) => `${cx('nav-link', { active: isActive })} `}>
               <HomeIcon />
             </NavLink>
           </Tippy>
-          <Tippy content={'Playlist'}>
+
+          {/* <Tippy content={'Playlist'}>
             <NavLink to={routes.playlist} className={({ isActive }) => `${cx('nav-link', { active: isActive })} `}>
               <PlayListIcon />
             </NavLink>
@@ -33,18 +34,18 @@ function Sidebar() {
             <NavLink to={`/me2`} className={({ isActive }) => `${cx('nav-link', { active: isActive })} `}>
               <PlayListIcon />
             </NavLink>
-          </Tippy>
+          </Tippy> */}
         </Flexbox>
       </div>
 
       <div>
         <Flexbox gy={3} column alignCenter className={`bg-dark-alt px-3 py-5 rounded w-fit m-auto`}>
-          <Tippy content={'Me'}>
+          <Tippy content={'Me'} placement={`left-start`}>
             <NavLink to={routes.profile} className={({ isActive }) => `${cx('nav-link', { active: isActive })} `}>
               <UserIcon />
             </NavLink>
           </Tippy>
-          <Tippy content={'Me'}>
+          <Tippy content={'Logout'} placement={`left-end`}>
             <NavLink to={`/me2`} className={({ isActive }) => `${cx('nav-link', { active: isActive })} `}>
               <LogoutIcon />
             </NavLink>

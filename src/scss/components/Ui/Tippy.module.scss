@@ -3,8 +3,9 @@
 // Tooltip
 .tooltip-wrapper {
   position: fixed;
-  top: 50px;
-  left: 50px;
   z-index: 999;
+  max-width: 350px;
+  max-height: 100vh;
   border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

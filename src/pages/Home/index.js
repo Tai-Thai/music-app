@@ -37,7 +37,7 @@ function Home() {
       console.log({ HomeData: response.data.items });
       setData(response.data.items);
     };
-    fetchData();
+    // fetchData();
     return;
   }, [getDataError]);
   return (
