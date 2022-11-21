@@ -9,11 +9,11 @@ import { setCurrentSongId } from '~/features/playlist/playlistSlice';
 
 const cx = classNames.bind(styles);
 
-const ChartCard = ({ songKey, title, thumbnail, artists, position }) => {
+const ChartCard = ({ encodeId, title, thumbnail, artist, position }) => {
   const [favorites, setFavorites] = useState(false);
   const dispatch = useDispatch();
 
-  const handleSetCurrentSong = () => dispatch(setCurrentSongId(songKey));
+  const handleSetCurrentSong = () => dispatch(setCurrentSongId(encodeId));
 
   return (
     <div className={cx('p-3 bg-dark-alt', 'chart-card')} onClick={handleSetCurrentSong}>
@@ -27,10 +27,10 @@ const ChartCard = ({ songKey, title, thumbnail, artists, position }) => {
               {title}
             </Text>
             <Text maxLine={1} fz={12} className={cx('op-2')}>
-              {artists[0] ? artists[0].name : ''}
+              {artist ? artist.name : ''}
             </Text>
             <Text fz={12} className={cx('top-index')}>
-              Top {position}
+              Top {position + 1}
             </Text>
           </Flexbox>
         </Col>

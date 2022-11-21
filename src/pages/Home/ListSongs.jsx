@@ -76,15 +76,7 @@ const ListSongs = ({ data, title, itemType, ...props }) => {
       <div ref={container} className={cx('container-songs')}>
         <div ref={listSongs} className={cx('list-songs', 'd-flex', 'gx-3')}>
           {data?.map((songItem) => {
-            return (
-              <SongItem
-                key={songItem.key || songItem.songKey}
-                isScrolling={isScrolling}
-                songKey={songItem.key || songItem.songKey}
-                itemType={itemType}
-                {...songItem}
-              />
-            );
+            return <SongItem key={songItem.encodeId} isScrolling={isScrolling} itemType={itemType} {...songItem} />;
           })}
         </div>
       </div>
@@ -92,31 +84,31 @@ const ListSongs = ({ data, title, itemType, ...props }) => {
   );
 };
 
-const SongItem = ({ songKey, thumbnail, thumbURL, title, artists, itemType, ...props }) => {
+const SongItem = ({ encodeId, thumbnail, thumbnailM, title, artists, itemType, ...props }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSetCurrentSong = () => {
     // if container is scrolling => return
     if (props.isScrolling) return;
-    console.log({ songKey });
+    console.log({ encodeId });
     if (itemType === 'song') {
-      dispatch(setCurrentSongId(songKey));
+      dispatch(setCurrentSongId(encodeId));
     } else {
-      navigate(`/playlist/${songKey}?type=${itemType}`);
+      navigate(`/playlist/${encodeId}?type=${itemType}`);
     }
   };
 
   return (
     <div className={cx('song-item', 'pointer')} onClick={handleSetCurrentSong}>
       <Flexbox column gx={0}>
-        <Thumbnail className={cx('mb-1')} src={thumbnail || thumbURL} />
+        <Thumbnail className={cx('mb-1')} src={thumbnailM || thumbnail} />
         <div>
           <Text maxLine={2} fz={12} className={cx('my-1')}>
             {title}
           </Text>
         </div>
         <Text fz={12} className={cx('op-2')}>
-          {artists && artists[0] ? artists[0].name : ''}
+          {artists ? artists[0]?.name : ''}
         </Text>
       </Flexbox>
     </div>

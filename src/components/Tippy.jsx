@@ -7,9 +7,9 @@ import { classNames } from '~/utils';
 
 const cx = classNames.bind(styles);
 
-export const Tippy = (props) => {
+const Tippy = (props) => {
   const { children, content, position, space = 10, ...prop } = props;
-  const [isShow, setIsShow] = useState(true);
+  const [isShow, setIsShow] = useState(false);
   const [positionDetail, setPositionDetail] = useState({});
   const childrenRef = useRef(null);
 
@@ -26,7 +26,7 @@ export const Tippy = (props) => {
   useEffect(() => {
     // console.log({ childrenref: childrenRef.current });
     const clientReact = childrenRef.current.getBoundingClientRect();
-    console.log({ clientReact: clientReact });
+    // console.log({ clientReact: clientReact });
     const left = clientReact.right + space + 'px';
     const top = clientReact.top - clientReact.height / 2 + 'px';
     setPositionDetail({ left, top });
@@ -34,7 +34,7 @@ export const Tippy = (props) => {
 
   return (
     <>
-      {console.log(positionDetail)}
+      {/* {console.log(positionDetail)} */}
       {React.cloneElement(children, {
         ...children,
         ref: childrenRef,
@@ -56,3 +56,5 @@ export const Tippy = (props) => {
   );
 };
 Tippy.propTypes = {};
+
+export default Tippy;

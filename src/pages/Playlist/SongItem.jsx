@@ -2,11 +2,11 @@ import React, { forwardRef, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Col, Text, Flexbox } from '~/components/Ui';
 import { Favorites, Thumbnail } from '~/components';
-import { classNames } from '~/utils';
+import { classNames, seconds2time } from '~/utils';
 import styles from '~/scss/pages/Playlist.module.scss';
 import { MoreVerticalIcon } from '~/components/Icons';
-import { setCurrentSongId, setIndexCurrentSong, pushListenedSongs } from '~/features/playlist/playlistSlice';
-import { useDispatch } from 'react-redux';
+import { setCurrentSongId, setIndexCurrentSong, pushListenedSongs, setPointerHistory } from '~/features/playlist/playlistSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { routes } from '~/configs';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ const cx = classNames.bind(styles);
 
 const SongItem = (props, ref) => {
   const {
-    songKey,
+    encodeId,
     title,
     thumbnail,
     artists: [artist],
@@ -25,6 +25,7 @@ const SongItem = (props, ref) => {
     ...prop
   } = props;
   const [favorites, setFavorites] = useState(false);
+  const { listenedSongs } = useSelector((state) => state.playlist);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const showMoreRef = useRef(null);
@@ -34,9 +35,10 @@ const SongItem = (props, ref) => {
       return;
     } else {
       if (type === 'topic') {
-        navigate(`${routes.playlist}/${songKey}?type=playlist`);
+        navigate(`${routes.playlist}/${encodeId}?type=playlist`);
         return;
       }
+      dispatch(setPointerHistory(listenedSongs.length));
       dispatch(setIndexCurrentSong(index));
       dispatch(pushListenedSongs(index));
     }
@@ -63,7 +65,7 @@ const SongItem = (props, ref) => {
               {artist.name}
             </Text>
             <Text fz={12} maxLine={1}>
-              {duration}
+              {seconds2time(duration)}
             </Text>
             <MoreVerticalIcon
               ref={showMoreRef}

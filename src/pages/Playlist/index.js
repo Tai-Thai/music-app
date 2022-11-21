@@ -1,21 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Favorites, Thumbnail } from '~/components';
 import { Grid, Col, Text, Flexbox } from '~/components/Ui';
-import { classNames } from '~/utils';
+import { classNames, seconds2time } from '~/utils';
 import { AddCollectionIcon, PlayAllIcon } from '~/components/Icons';
 import SongItem from './SongItem';
 import styles from '~/scss/pages/Playlist.module.scss';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { getPlaylistDetail, getPlaylists, getTopicDetail } from '~/apis';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPlaylist } from '~/features/playlist/playlistSlice';
+import { removeListenedSongs, setPlaylist } from '~/features/playlist/playlistSlice';
 import PlaylistCard from '~/components/PlaylistCard';
-import { Tippy } from '~/components/Ui/Tippy';
+import { Tippy } from '~/components';
+import { request } from '~/services';
 
 const cx = classNames.bind(styles);
 
 function Playlist({ setBackgroundImage }) {
-  const { playlist, indexCurrentSong } = useSelector((state) => state.playlist);
+  const { playlist, indexCurrentSong, listenedSongs } = useSelector((state) => state.playlist);
   const dispatch = useDispatch();
   const [favorites, setFavorites] = useState(false);
   const { playlistKey } = useParams();
@@ -23,9 +24,10 @@ function Playlist({ setBackgroundImage }) {
   const [topicData, setTopicData] = useState({});
   const dataType = searchParams.get('type');
   const ContainerList = dataType === 'topic' ? Grid : 'div';
+  console.log({ playlist });
 
   const refs =
-    playlist?.songs?.reduce((acc, next, index) => {
+    playlist?.song?.items.reduce((acc, next, index) => {
       acc[`song-ref-${index}`] = React.createRef();
       return acc;
     }, {}) || {};
@@ -35,39 +37,33 @@ function Playlist({ setBackgroundImage }) {
     if (dataType === 'topic') {
       data = topicData?.playlist || [];
     } else {
-      data = playlist?.songs || [];
+      data = playlist?.song?.items || [];
     }
 
-    console.log({ renderData: data });
+    // console.log({ renderData: data });
     return data.slice(0, 10).map((item, index) => {
       if (dataType === 'topic') {
         return <PlaylistCard key={item.key} _key={item.key} {...item} />;
       }
       return (
-        <SongItem
-          ref={refs[`song-ref-${index}`]}
-          key={item.key}
-          activeSong={index === indexCurrentSong}
-          songKey={item.key}
-          index={index}
-          {...item}
-        />
+        <SongItem ref={refs[`song-ref-${index}`]} key={item.encodeId} activeSong={index === indexCurrentSong} index={index} {...item} />
       );
     });
   };
 
   const handleGetPlaylist = (apiMethod) => {
-    apiMethod(playlistKey).then((data) => {
-      console.log({ data });
-      if (dataType === 'topic') {
-        setTopicData(data.topic);
-      } else {
-        dispatch(setPlaylist(data.playlist));
-      }
-    });
+    // apiMethod(playlistKey).then((data) => {
+    //   console.log({ data });
+    //   if (dataType === 'topic') {
+    //     setTopicData(data.topic);
+    //   } else {
+    //     dispatch(setPlaylist(data.playlist));
+    //   }
+    // });
   };
 
   useEffect(() => {
+    // scroll into view current song position
     if (indexCurrentSong) {
       const currentSong = refs[`song-ref-${indexCurrentSong}`]?.current;
       if (currentSong) {
@@ -83,16 +79,24 @@ function Playlist({ setBackgroundImage }) {
   useEffect(() => {
     console.log({ playlistKey });
     console.log({ searchParams: searchParams.get('type') });
-    switch (dataType) {
-      case 'topic':
-        handleGetPlaylist(getTopicDetail);
-        break;
-      case 'playlist':
-        handleGetPlaylist(getPlaylistDetail);
-        break;
-      default:
-        break;
-    }
+    // switch (dataType) {
+    //   case 'topic':
+    //     handleGetPlaylist(getTopicDetail);
+    //     break;
+    //   case 'playlist':
+    //     // handleGetPlaylist(getPlaylistDetail);
+
+    //     break;
+    //   default:
+    //     break;
+    // }
+    const fetchData = async () => {
+      console.log('fetching data detail playlist');
+      const response = await request.get(`/detailplaylist?id=${playlistKey}`);
+      console.log({ response });
+      dispatch(setPlaylist(response.data));
+    };
+    fetchData();
     /*     setBackgroundImage('https://mir-s3-cdn-cf.behance.net/project_modules/1400/04d7d2105464265.617b69951ef14.png'); */
     return () => {};
   }, [playlistKey]);
@@ -101,7 +105,10 @@ function Playlist({ setBackgroundImage }) {
     <div>
       <Grid gx={0}>
         <Col lg={4}>
-          <Thumbnail className={cx('thumbnail')} src={dataType === 'playlist' ? playlist?.thumbnail : topicData?.coverImageURL} />
+          <Thumbnail
+            className={cx('thumbnail')}
+            src={dataType === 'playlist' ? playlist?.thumbnailM || playlist?.thumbnail : topicData?.coverImageURL}
+          />
         </Col>
         <Col lg={'5'}>
           <Flexbox column justifyEnd className={cx('h-100')}>
@@ -109,10 +116,13 @@ function Playlist({ setBackgroundImage }) {
               <Text tagName={'h3'} maxLine={2} fz={35} className={'cl-alt'}>
                 {dataType === 'playlist' ? playlist?.title : topicData?.title}
               </Text>
-              <Text fz={14}>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione doloribus, nostrum, aut possimus voluptates necessitatibus
+              <Text fz={14} maxLine={4}>
+                {(playlist && playlist?.description) ||
+                  'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione doloribus, nostrum, aut possimus voluptates necessitatibus'}
               </Text>
-              <Text fz={14}>{playlist?.songs?.length} songs ~ 16 hrs+</Text>
+              <Text fz={14}>
+                {playlist?.song?.total} songs ~ {seconds2time(playlist?.song?.totalDuration)} hrs+
+              </Text>
             </Flexbox>
             <Flexbox className='mt-6'>
               <Tippy>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { HeartIcon, HomeIcon, LogoutIcon, PlayListIcon, UserIcon } from '~/components/Icons';
-import { Col, Flexbox, Grid, Tippy } from '~/components/Ui';
+import { Tippy } from '~/components';
+import { Col, Flexbox, Grid } from '~/components/Ui';
 import { classNames } from '~/utils';
 import styles from '~/scss/layouts/Sidebar.module.scss';
 import { routes } from '~/configs';

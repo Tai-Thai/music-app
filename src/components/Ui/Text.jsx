@@ -6,7 +6,7 @@ import { forwardRef } from 'react';
 const cx = classNames.bind(styles);
 
 export const Text = forwardRef((props, ref) => {
-  const { children, className, tagName = 'span', bold, uppercase, capitalize, fz, maxLine, ...prop } = props;
+  const { children, className, tagName = 'p', bold, uppercase, capitalize, fz, maxLine, ...prop } = props;
   const Tag = tagName;
 
   const _className = cx(className, { bold, uppercase, capitalize, [`fz-${fz}`]: fz, [`max-line-${maxLine}`]: maxLine });
@@ -25,6 +25,6 @@ Text.propTypes = {
   bold: PropTypes.bool,
   uppercase: PropTypes.bool,
   capitalize: PropTypes.bool,
-  fz: PropTypes.oneOf([10, 12, 14, 17, 20, 24, 29, 35]),
+  fz: PropTypes.oneOf([10, 12, 14, 17, 20, 24, 29, 35]), // styles from figma
   maxLine: PropTypes.oneOf([1, 2, 3, 4, 5, 6])
 };

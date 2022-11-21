@@ -9,11 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { getLyric, getSong } from '~/apis';
 import { seconds2time } from '~/utils';
-import { pushListenedSongs, setIndexCurrentSong } from '~/features/playlist/playlistSlice';
+import { pushListenedSongs, setCurrentSongId, setIndexCurrentSong, setPointerHistory } from '~/features/playlist/playlistSlice';
+import { request } from '~/services';
 const cx = classNames.bind(styles);
 
 function MusicPlayer() {
-  const { currentSongId: songId, indexCurrentSong, playlist, listenedSongs } = useSelector((state) => state.playlist);
+  const { currentSongId: songId, indexCurrentSong, playlist, listenedSongs, pointerHistory } = useSelector((state) => state.playlist);
   const dispatch = useDispatch();
 
   const [currentSong, setCurrentSong] = useState({});
@@ -28,13 +29,8 @@ function MusicPlayer() {
   const volumeBarRef = useRef(null);
   const timeLeftRef = useRef(null);
   const timeRightRef = useRef(null);
-  console.log({ songId, indexCurrentSong, playlist, listenedSongs });
-
-  // const arr = useMemo(() => {
-  //   console.log('use memo');
-  //   return [];
-  // }, []);
-  const arr = [];
+  console.log({ songId, currentSong, indexCurrentSong, playlist, listenedSongs });
+  console.log({ pointerHistory, listenedSongs, length: listenedSongs.length });
 
   // animation of time line input type range
   const handleInputRangeAnimation = function (target) {
@@ -94,43 +90,53 @@ function MusicPlayer() {
   const handleShuffle = () => setIsShuffle(!isShuffle);
 
   // handle previous and next song
-  const handlePreviousSong = () => handleNextAndPrevSong(indexCurrentSong - 1);
-  const handleNextSong = () => handleNextAndPrevSong(indexCurrentSong + 1);
-  // handle next song
-  const handleNextAndPrevSong = (index) => {
-    let nextIndex;
-    if (isShuffle) {
-      do {
-        nextIndex = Math.floor(Math.random() * playlist.songs.length);
-      } while (listenedSongs.includes(nextIndex));
+  const handlePreviousSong = () => {
+    if (pointerHistory === null) return;
+    let indexPrevSongInPlaylist; // index in playlist
+    if (pointerHistory - 1 < 0) {
+      indexPrevSongInPlaylist = listenedSongs[listenedSongs.length - 1];
     } else {
-      nextIndex = index;
-      if (nextIndex > playlist.length) nextIndex = 0;
-      else if (nextIndex < 0) nextIndex = playlist.songs.length;
+      indexPrevSongInPlaylist = listenedSongs[pointerHistory - 1];
     }
-    dispatch(setIndexCurrentSong(nextIndex));
-    dispatch(pushListenedSongs(nextIndex));
+    dispatch(setPointerHistory(pointerHistory - 1 < 0 ? listenedSongs.length - 1 : pointerHistory - 1));
+    dispatch(setIndexCurrentSong(indexPrevSongInPlaylist));
   };
-
+  const handleNextSong = () => {
+    let nextIndex;
+    const lengthListenedSongs = listenedSongs.length; // length of list of songs listened
+    if (pointerHistory >= lengthListenedSongs - 1 || pointerHistory === null) {
+      if (isShuffle) {
+        do {
+          // fix 10
+          nextIndex = Math.floor(Math.random() * 10 || playlist?.song?.items.length);
+        } while (listenedSongs.includes(nextIndex));
+      } else {
+        nextIndex = pointerHistory === null ? 0 : indexCurrentSong + 1;
+        if (nextIndex > playlist?.song?.items.length) nextIndex = 0;
+      }
+      dispatch(setPointerHistory(lengthListenedSongs <= 0 ? 0 : lengthListenedSongs));
+      dispatch(setIndexCurrentSong(nextIndex));
+      dispatch(pushListenedSongs(nextIndex));
+      return;
+    }
+    // next pointer in list of songs listened
+    dispatch(setPointerHistory(pointerHistory + 1));
+    dispatch(setIndexCurrentSong(listenedSongs[pointerHistory + 1]));
+  };
   // handle loop song
   const handleLoop = () => setIsLoop(!isLoop);
 
   // handle muted
   const handleMutedChange = () => setMuted(!muted);
 
-  const handleGetCurrentSong = () => {
-    getSong(songId)
-      .then((data) => {
-        console.log({ data });
-        if (data.status === 'error') {
-          // setError('error' + Date.now());
-          return;
-        }
-        setCurrentSong(data?.song);
-        setIsPlaying(true);
-        setError('success');
-      })
-      .catch((err) => setError('error' + Date.now()));
+  const handleGetCurrentSong = async () => {
+    const [streamUrls, infoSong] = await Promise.all([request.get(`/song?id=${songId}`), request.get(`/infosong?id=${songId}`)]);
+    const streamUrl = streamUrls?.data ? (streamUrls.data[320] !== 'VIP' && streamUrls.data[320]) || streamUrls.data[128] : '';
+    // if (streamUrl === '') alert(streamUrls.msg);
+    setCurrentSong({
+      ...infoSong.data,
+      streamUrl
+    });
   };
 
   useEffect(() => {
@@ -140,17 +146,20 @@ function MusicPlayer() {
   }, []);
 
   useEffect(() => {
-    console.log({ actions: 'get song', error });
-    if (songId) handleGetCurrentSong();
+    console.log({ actions: 'get song', songId });
+    if (songId) {
+      handleGetCurrentSong();
+      setIsPlaying(true);
+    }
   }, [songId]);
 
-  useEffect(() => {
-    if (indexCurrentSong === null) return;
-    console.log({ arr });
-    const songs = playlist.songs;
-    setCurrentSong(songs[indexCurrentSong]);
-    setIsPlaying(true);
-  }, [indexCurrentSong]);
+  // useEffect(() => {
+  //   if (indexCurrentSong === null) return;
+  //   // console.log({ arr });
+  //   // const songs = playlist.songs;
+  //   // setCurrentSong(songs[indexCurrentSong]);
+  //   setIsPlaying(true);
+  // }, [indexCurrentSong]);
 
   // fix
   useEffect(() => {
@@ -162,7 +171,6 @@ function MusicPlayer() {
 
   return (
     <div className={cx('wrapper', 'py-5')}>
-      {console.log({ currentSong: currentSong })}
       <Container>
         <Grid>
           <Col lg={1}>
@@ -254,8 +262,8 @@ function MusicPlayer() {
                     loop={isLoop}
                     muted={muted}
                     src={
-                      currentSong?.streamUrls?.length
-                        ? currentSong?.streamUrls[0].streamUrl
+                      currentSong?.streamUrl
+                        ? currentSong?.streamUrl
                         : 'https://stream.nixcdn.com/NhacCuaTui2026/WaitingForYou-MONOOnionn-7733882.mp3?st=8hRiCvjotE2Zf8nfXqDTTg&e=1668156600&t=1668071682206'
                     }
                     onTimeUpdate={handleTimeUpdate}
