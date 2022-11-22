@@ -22,6 +22,7 @@ function Playlist({ setBackgroundImage }) {
   const { playlistKey } = useParams();
   const [searchParams] = useSearchParams();
   const [topicData, setTopicData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const dataType = searchParams.get('type');
   const ContainerList = dataType === 'topic' ? Grid : 'div';
   console.log({ playlist });
@@ -41,14 +42,25 @@ function Playlist({ setBackgroundImage }) {
     }
 
     // console.log({ renderData: data });
-    return data.slice(0, 10).map((item, index) => {
-      if (dataType === 'topic') {
-        return <PlaylistCard key={item.key} _key={item.key} {...item} />;
-      }
-      return (
-        <SongItem ref={refs[`song-ref-${index}`]} key={item.encodeId} activeSong={index === indexCurrentSong} index={index} {...item} />
-      );
-    });
+    return isLoading
+      ? [1, 2, 3, 4, 5, 6].map((item, index) => (
+          <SongItem
+            ref={refs[`song-ref-${index}`]}
+            key={index}
+            isLoading={isLoading}
+            activeSong={index === indexCurrentSong}
+            index={index}
+            {...item}
+          />
+        ))
+      : data.slice(0, 10).map((item, index) => {
+          if (dataType === 'topic') {
+            return <PlaylistCard key={item.key} _key={item.key} {...item} />;
+          }
+          return (
+            <SongItem ref={refs[`song-ref-${index}`]} key={item.encodeId} activeSong={index === indexCurrentSong} index={index} {...item} />
+          );
+        });
   };
 
   const handleGetPlaylist = (apiMethod) => {
@@ -91,10 +103,17 @@ function Playlist({ setBackgroundImage }) {
     //     break;
     // }
     const fetchData = async () => {
-      console.log('fetching data detail playlist');
-      const response = await request.get(`/detailplaylist?id=${playlistKey}`);
-      console.log({ response });
-      dispatch(setPlaylist(response.data));
+      setIsLoading(true);
+      try {
+        console.log('fetching data detail playlist');
+        const response = await request.get(`/detailplaylist?id=${playlistKey}`);
+        console.log({ response });
+        dispatch(setPlaylist(response.data));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData();
     /*     setBackgroundImage('https://mir-s3-cdn-cf.behance.net/project_modules/1400/04d7d2105464265.617b69951ef14.png'); */
@@ -106,46 +125,52 @@ function Playlist({ setBackgroundImage }) {
       <Grid gx={0}>
         <Col lg={4}>
           <Thumbnail
+            skeletonType={'thumbnail'}
             className={cx('thumbnail')}
+            isLoading={isLoading}
+            skeletonStyle={{ backgroundImage: 'url()' }}
             src={dataType === 'playlist' ? playlist?.thumbnailM || playlist?.thumbnail : topicData?.coverImageURL}
           />
         </Col>
         <Col lg={'5'}>
           <Flexbox column justifyEnd className={cx('h-100')}>
             <Flexbox column gy={1}>
-              <Text tagName={'h3'} maxLine={2} fz={35} className={'cl-alt'}>
+              <Text tagName={'h3'} maxLine={2} fz={35} isLoading={isLoading} className={'cl-alt'}>
                 {dataType === 'playlist' ? playlist?.title : topicData?.title}
               </Text>
-              <Text fz={14} maxLine={4}>
-                {(playlist && playlist?.description) ||
+              <Text fz={14} maxLine={4} isLoading={isLoading}>
+                {isLoading ||
+                  (playlist && playlist?.description) ||
                   'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione doloribus, nostrum, aut possimus voluptates necessitatibus'}
               </Text>
-              <Text fz={14}>
+              <Text fz={14} isLoading={isLoading}>
                 {playlist?.song?.total} songs ~ {seconds2time(playlist?.song?.totalDuration)} hrs+
               </Text>
             </Flexbox>
-            <Flexbox className='mt-6'>
-              <Tippy>
+            {isLoading || (
+              <Flexbox className='mt-6'>
+                <Tippy>
+                  <div className={cx('action-btn', 'rounded px-3 py-2 d-flex align-items-center justify-content-center mr-2 pointer')}>
+                    <PlayAllIcon className={cx('icon', 'cl-secondary', 'mr-2')} />
+                    <Text fz={12}>Play all</Text>
+                  </div>
+                </Tippy>
                 <div className={cx('action-btn', 'rounded px-3 py-2 d-flex align-items-center justify-content-center mr-2 pointer')}>
-                  <PlayAllIcon className={cx('icon', 'cl-secondary', 'mr-2')} />
-                  <Text fz={12}>Play all</Text>
+                  <AddCollectionIcon className={cx('icon', 'cl-secondary', 'mr-2')} />
+                  <Text fz={12}>Add to collection</Text>
                 </div>
-              </Tippy>
-              <div className={cx('action-btn', 'rounded px-3 py-2 d-flex align-items-center justify-content-center mr-2 pointer')}>
-                <AddCollectionIcon className={cx('icon', 'cl-secondary', 'mr-2')} />
-                <Text fz={12}>Add to collection</Text>
-              </div>
-              <div
-                className={cx(
-                  'favorites-btn',
-                  'action-btn',
-                  'rounded px-2 py-2 d-flex align-items-center justify-content-center mr-2 pointer w-fit'
-                )}
-                onClick={() => setFavorites(!favorites)}
-              >
-                <Favorites activeClass={cx('favorites-active')} active={favorites} border={false} />
-              </div>
-            </Flexbox>
+                <div
+                  className={cx(
+                    'favorites-btn',
+                    'action-btn',
+                    'rounded px-2 py-2 d-flex align-items-center justify-content-center mr-2 pointer w-fit'
+                  )}
+                  onClick={() => setFavorites(!favorites)}
+                >
+                  <Favorites activeClass={cx('favorites-active')} active={favorites} border={false} />
+                </div>
+              </Flexbox>
+            )}
           </Flexbox>
         </Col>
       </Grid>

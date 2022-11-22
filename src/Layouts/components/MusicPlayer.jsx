@@ -4,7 +4,7 @@ import { Container, Grid, Col, Flexbox, Text } from '~/components/Ui';
 import { classNames } from '~/utils';
 import styles from '~/scss/layouts/MusicPlayer.module.scss';
 import { NextIcon, PauseIcon, PlayIcon, PreviousIcon, RepeatOneIcon, ShuffleIcon, VolumeIcon } from '~/components/Icons';
-import { Thumbnail } from '~/components';
+import { Thumbnail, Tippy } from '~/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { getLyric, getSong } from '~/apis';
@@ -18,6 +18,7 @@ function MusicPlayer() {
   const dispatch = useDispatch();
 
   const [currentSong, setCurrentSong] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoop, setIsLoop] = useState(false);
   const [error, setError] = useState('error');
@@ -130,13 +131,19 @@ function MusicPlayer() {
   const handleMutedChange = () => setMuted(!muted);
 
   const handleGetCurrentSong = async () => {
-    const [streamUrls, infoSong] = await Promise.all([request.get(`/song?id=${songId}`), request.get(`/infosong?id=${songId}`)]);
-    const streamUrl = streamUrls?.data ? (streamUrls.data[320] !== 'VIP' && streamUrls.data[320]) || streamUrls.data[128] : '';
-    // if (streamUrl === '') alert(streamUrls.msg);
-    setCurrentSong({
-      ...infoSong.data,
-      streamUrl
-    });
+    setIsLoading(true);
+    try {
+      const [streamUrls, infoSong] = await Promise.all([request.get(`/song?id=${songId}`), request.get(`/infosong?id=${songId}`)]);
+      const streamUrl = streamUrls?.data ? (streamUrls.data[320] !== 'VIP' && streamUrls.data[320]) || streamUrls.data[128] : '';
+      // if (streamUrl === '') alert(streamUrls.msg);
+      setCurrentSong({
+        ...infoSong.data,
+        streamUrl
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -152,14 +159,6 @@ function MusicPlayer() {
       setIsPlaying(true);
     }
   }, [songId]);
-
-  // useEffect(() => {
-  //   if (indexCurrentSong === null) return;
-  //   // console.log({ arr });
-  //   // const songs = playlist.songs;
-  //   // setCurrentSong(songs[indexCurrentSong]);
-  //   setIsPlaying(true);
-  // }, [indexCurrentSong]);
 
   // fix
   useEffect(() => {
@@ -193,19 +192,23 @@ function MusicPlayer() {
 
                 <Grid gx={1} className='align-items-center'>
                   <Col lg={5}>
-                    <Thumbnail className={cx('thumbnail2', 'relative')} src={currentSong?.thumbnail || currentSong?.thumbURL}>
+                    <Thumbnail
+                      isLoading={isLoading}
+                      className={cx('thumbnail2', 'relative')}
+                      src={currentSong?.thumbnail || currentSong?.thumbURL}
+                    >
                       {isPlaying && <div className={cx('equalizer')}></div>}
                     </Thumbnail>
                   </Col>
                   <Col lg={7} className={'align-items-center'}>
-                    <span>
-                      <Text fz={14} maxLine={2} tagName={'h4'} className={cx('cl-white')}>
+                    <div>
+                      <Text fz={14} isLoading={isLoading} maxLine={2} tagName={'h4'} className={cx('cl-white')}>
                         {currentSong?.title || ''}
                       </Text>
-                      <Text fz={10} bold className={cx('cl-white', 'op-2')}>
+                      <Text fz={10} bold isLoading={isLoading} skeletonClassName={cx('mt-1')} className={cx('cl-white', 'op-2')}>
                         {currentSong?.artists && currentSong?.artists[0] ? currentSong?.artists[0].name : ''}
                       </Text>
-                    </span>
+                    </div>
                   </Col>
                 </Grid>
               </Col>
@@ -214,18 +217,22 @@ function MusicPlayer() {
                   <Flexbox gx={4}>
                     <ShuffleIcon className={cx('control-btn', 'cl-white', { active: isShuffle })} onClick={handleShuffle} />
                     <PreviousIcon className={cx('control-btn', 'cl-white')} onClick={handlePreviousSong} />
-                    <Flexbox
-                      alignCenter
-                      justifyCenter
-                      className={cx('play-btn', 'rounded', 'bg-secondary', 'pointer')}
-                      onClick={handlePlay}
-                    >
-                      {isPlaying ? (
-                        <PlayIcon className={cx('control-btn', 'show-animation', 'cl-white')} />
-                      ) : (
-                        <PauseIcon className={cx('control-btn', 'show-animation', 'cl-white')} />
-                      )}
-                    </Flexbox>
+                    <Tippy content={`play and pause`} placement='top'>
+                      <div>
+                        <Flexbox
+                          alignCenter
+                          justifyCenter
+                          className={cx('play-btn', 'rounded', 'bg-secondary', 'pointer')}
+                          onClick={handlePlay}
+                        >
+                          {isPlaying ? (
+                            <PlayIcon className={cx('control-btn', 'show-animation', 'cl-white')} />
+                          ) : (
+                            <PauseIcon className={cx('control-btn', 'show-animation', 'cl-white')} />
+                          )}
+                        </Flexbox>
+                      </div>
+                    </Tippy>
                     <NextIcon className={cx('control-btn', 'cl-white')} onClick={handleNextSong} />
                     <RepeatOneIcon className={cx('control-btn', 'cl-white', { active: isLoop })} onClick={handleLoop} />
                   </Flexbox>

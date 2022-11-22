@@ -10,10 +10,12 @@
 
 .banner-wrapper {
   position: relative;
+  border-radius: 40px;
+  height: 373px;
+  overflow: hidden;
   .banner {
-    height: 373px;
+    height: 100%;
     object-fit: cover;
-    border-radius: 40px;
     z-index: 2;
   }
   &::after {

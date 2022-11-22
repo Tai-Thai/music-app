@@ -2,16 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { classNames } from '~/utils';
 import styles from '~/scss/components/Thumbnail.module.scss';
+import { Skeleton } from './Skeleton';
 
 const cx = classNames.bind(styles);
 
 const Thumbnail = ({ children, className, src, equalizer = false, ...props }) => {
   const _className = cx('thumbnail', 'relative', className);
   return (
-    <div className={_className} style={{ backgroundImage: `url(${src})` }} {...props}>
+    <Skeleton className={_className} style={{ backgroundImage: `url(${src})` }} {...props}>
       {children}
       {equalizer && <div className={cx('equalizer')}></div>}
-    </div>
+    </Skeleton>
   );
 };
 

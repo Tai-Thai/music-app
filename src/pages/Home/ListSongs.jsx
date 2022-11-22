@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-const ListSongs = ({ data, title, itemType, ...props }) => {
+const ListSongs = ({ data, title, itemType, isLoading, ...props }) => {
   const container = useRef();
   const listSongs = useRef();
   const [isScrolling, setIsScrolling] = useState(false);
@@ -70,24 +70,29 @@ const ListSongs = ({ data, title, itemType, ...props }) => {
 
   return (
     <>
-      <Text bold fz={24} className={'my-2 mt-4'}>
+      <Text bold fz={24} isLoading={isLoading} skeletonWidth={'300px'} className={'my-2 mt-4'}>
         {title}
       </Text>
       <div ref={container} className={cx('container-songs')}>
         <div ref={listSongs} className={cx('list-songs', 'd-flex', 'gx-3')}>
-          {data?.map((songItem) => {
-            return <SongItem key={songItem.encodeId} isScrolling={isScrolling} itemType={itemType} {...songItem} />;
-          })}
+          {isLoading
+            ? [1, 2, 3, 4, 5, 6].map((item, index) => (
+                <SongItem key={index} isScrolling={isScrolling} isLoading={isLoading} itemType={itemType} />
+              ))
+            : data?.map((songItem) => {
+                return <SongItem key={songItem.encodeId} isScrolling={isScrolling} itemType={itemType} {...songItem} />;
+              })}
         </div>
       </div>
     </>
   );
 };
 
-const SongItem = ({ encodeId, thumbnail, thumbnailM, title, artists, itemType, ...props }) => {
+const SongItem = ({ encodeId, thumbnail, thumbnailM, title, artists, itemType, isLoading, ...props }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSetCurrentSong = () => {
+    if (isLoading) return;
     // if container is scrolling => return
     if (props.isScrolling) return;
     console.log({ encodeId });
@@ -101,13 +106,13 @@ const SongItem = ({ encodeId, thumbnail, thumbnailM, title, artists, itemType, .
   return (
     <div className={cx('song-item', 'pointer')} onClick={handleSetCurrentSong}>
       <Flexbox column gx={0}>
-        <Thumbnail className={cx('mb-1')} src={thumbnailM || thumbnail} />
+        <Thumbnail className={cx('mb-1')} isLoading={isLoading} src={thumbnailM || thumbnail} />
         <div>
-          <Text maxLine={2} fz={12} className={cx('my-1')}>
+          <Text maxLine={2} fz={12} isLoading={isLoading} skeletonWidth={'80%'} skeletonClassName={cx('ml-1')} className={cx('my-1')}>
             {title}
           </Text>
         </div>
-        <Text fz={12} className={cx('op-2')}>
+        <Text fz={12} isLoading={isLoading} skeletonWidth={'50%'} skeletonClassName={cx('ml-1')} className={cx('op-2')}>
           {artists ? artists[0]?.name : ''}
         </Text>
       </Flexbox>

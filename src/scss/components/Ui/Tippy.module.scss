@@ -1,9 +1,14 @@
 @use '../../index.scss' as *;
 
-// Tooltip
-.tooltip-wrapper {
+// Tippy
+.tippy-container {
   position: fixed;
   z-index: 999;
+}
+
+// Tooltip
+.tooltip-wrapper {
+  // fix max width
   max-width: 350px;
   max-height: 100vh;
   border-radius: 5px;

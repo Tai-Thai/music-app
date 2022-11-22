@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from '~/scss/components/Ui/Text.module.scss';
 import { classNames } from '~/utils';
 import { forwardRef } from 'react';
+import { Skeleton } from '../Skeleton';
 const cx = classNames.bind(styles);
 
 export const Text = forwardRef((props, ref) => {
@@ -12,9 +13,9 @@ export const Text = forwardRef((props, ref) => {
   const _className = cx(className, { bold, uppercase, capitalize, [`fz-${fz}`]: fz, [`max-line-${maxLine}`]: maxLine });
 
   return (
-    <Tag ref={ref} className={_className} {...prop}>
+    <Skeleton ref={ref} skeletonType={'text'} className={_className} {...prop}>
       {children}
-    </Tag>
+    </Skeleton>
   );
 });
 
