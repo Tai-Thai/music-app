@@ -59,7 +59,7 @@ function Home() {
         </Col>
         <Col lg={4}>
           <Flexbox column className={cx('h-100')}>
-            <Text tagName={'h3'} bold fz={24} isLoading={isLoading}>
+            <Text tagName={'h3'} bold fz={24} isLoading={isLoading} skeletonWidth={'50%'}>
               {data[7]?.title || 'Ranking'}
             </Text>
             <Flexbox column className={cx('ranking-content', 'pt-4')} gy={1}>

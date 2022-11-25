@@ -11,10 +11,18 @@ import { getLyric, getSong } from '~/apis';
 import { seconds2time } from '~/utils';
 import { pushListenedSongs, setCurrentSongId, setIndexCurrentSong, setPointerHistory } from '~/features/playlist/playlistSlice';
 import { request } from '~/services';
+import { useFetch } from '~/hooks';
 const cx = classNames.bind(styles);
 
 function MusicPlayer() {
-  const { currentSongId: songId, indexCurrentSong, playlist, listenedSongs, pointerHistory } = useSelector((state) => state.playlist);
+  const {
+    currentSongId: songId,
+    indexCurrentSong,
+    currentPlaylistId,
+    playlist,
+    listenedSongs,
+    pointerHistory
+  } = useSelector((state) => state.playlist);
   const dispatch = useDispatch();
 
   const [currentSong, setCurrentSong] = useState({});
@@ -30,9 +38,11 @@ function MusicPlayer() {
   const volumeBarRef = useRef(null);
   const timeLeftRef = useRef(null);
   const timeRightRef = useRef(null);
-  console.log({ songId, currentSong, indexCurrentSong, playlist, listenedSongs });
-  console.log({ pointerHistory, listenedSongs, length: listenedSongs.length });
+  // console.log({ songId, currentSong, indexCurrentSong, playlist, listenedSongs });
+  // console.log({ pointerHistory, listenedSongs, length: listenedSongs.length });
+  const { data: playlistData, isLoading: isLoadingPlaylist } = useFetch(`/detailplaylist?id=${currentPlaylistId}`);
 
+  console.log({ playlistData, currentPlaylistId, isLoading: isLoadingPlaylist });
   // animation of time line input type range
   const handleInputRangeAnimation = function (target) {
     target.style.setProperty('--duration', `${target.value}%`);
@@ -79,11 +89,6 @@ function MusicPlayer() {
 
   // handle play & pause events
   const handlePlay = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
     setIsPlaying(!isPlaying);
   };
 
@@ -101,6 +106,7 @@ function MusicPlayer() {
     }
     dispatch(setPointerHistory(pointerHistory - 1 < 0 ? listenedSongs.length - 1 : pointerHistory - 1));
     dispatch(setIndexCurrentSong(indexPrevSongInPlaylist));
+    dispatch(setCurrentSongId(playlistData?.data?.song?.items[indexPrevSongInPlaylist].encodeId));
   };
   const handleNextSong = () => {
     let nextIndex;
@@ -109,20 +115,23 @@ function MusicPlayer() {
       if (isShuffle) {
         do {
           // fix 10
-          nextIndex = Math.floor(Math.random() * 10 || playlist?.song?.items.length);
+          nextIndex = Math.floor(Math.random() * 10 || playlistData?.data?.song?.items.length);
         } while (listenedSongs.includes(nextIndex));
       } else {
         nextIndex = pointerHistory === null ? 0 : indexCurrentSong + 1;
-        if (nextIndex > playlist?.song?.items.length) nextIndex = 0;
+        if (nextIndex > playlistData?.data?.song?.items.length) nextIndex = 0;
       }
       dispatch(setPointerHistory(lengthListenedSongs <= 0 ? 0 : lengthListenedSongs));
       dispatch(setIndexCurrentSong(nextIndex));
+      dispatch(setCurrentSongId(playlistData?.data?.song?.items[nextIndex].encodeId));
       dispatch(pushListenedSongs(nextIndex));
       return;
     }
     // next pointer in list of songs listened
+    const indexNextSong = listenedSongs[pointerHistory + 1];
     dispatch(setPointerHistory(pointerHistory + 1));
-    dispatch(setIndexCurrentSong(listenedSongs[pointerHistory + 1]));
+    dispatch(setIndexCurrentSong(indexNextSong));
+    dispatch(setCurrentSongId(playlistData?.data?.song?.items[indexNextSong].encodeId));
   };
   // handle loop song
   const handleLoop = () => setIsLoop(!isLoop);
@@ -140,6 +149,9 @@ function MusicPlayer() {
         ...infoSong.data,
         streamUrl
       });
+      if (infoSong.data) {
+        setIsPlaying(true);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -160,6 +172,14 @@ function MusicPlayer() {
     }
   }, [songId]);
 
+  useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
+
   // fix
   useEffect(() => {
     console.log({ actions: 'get song', error });
@@ -175,7 +195,7 @@ function MusicPlayer() {
           <Col lg={1}>
             <div />
           </Col>
-          <Col lg={'fill'}>
+          <Col lg={11}>
             <Grid className='align-items-center'>
               <Col lg={2}>
                 {/* <Flexbox alignCenter gx={1}>
@@ -196,6 +216,7 @@ function MusicPlayer() {
                       isLoading={isLoading}
                       className={cx('thumbnail2', 'relative')}
                       src={currentSong?.thumbnail || currentSong?.thumbURL}
+                      skeletonStyle={{ background: `url(${currentSong?.thumbnailM || currentSong?.thumbnail}) center cover no-repeat` }}
                     >
                       {isPlaying && <div className={cx('equalizer')}></div>}
                     </Thumbnail>

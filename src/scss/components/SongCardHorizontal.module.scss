@@ -1,0 +1,20 @@
+@use '../index.scss' as *;
+
+// Song card horizontal
+.song-card-horizontal {
+  border-radius: 5px;
+  transition: all 0.2s;
+  &:hover {
+    background-color: $alpha-bg;
+  }
+}
+.song-card__thumbnail {
+  width: 52px;
+}
+.song-card__options-icon {
+  width: 15px;
+  margin-left: auto;
+}
+.card-title {
+  line-height: 24px;
+}

@@ -1,11 +1,17 @@
 import React, { forwardRef, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Col, Text, Flexbox } from '~/components/Ui';
-import { Favorites, Thumbnail, Tippy } from '~/components';
+import { Favorites, SkeletonContainer, Thumbnail, Tippy } from '~/components';
 import { classNames, seconds2time } from '~/utils';
 import styles from '~/scss/pages/Playlist.module.scss';
 import { MoreVerticalIcon } from '~/components/Icons';
-import { setCurrentSongId, setIndexCurrentSong, pushListenedSongs, setPointerHistory } from '~/features/playlist/playlistSlice';
+import {
+  setCurrentSongId,
+  setIndexCurrentSong,
+  pushListenedSongs,
+  setPointerHistory,
+  setCurrentPlaylistId
+} from '~/features/playlist/playlistSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { routes } from '~/configs';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 const SongItem = (props, ref) => {
-  const { encodeId, title, thumbnail, artists, duration, type, index, activeSong, isLoading, ...prop } = props;
+  const { encodeId, playlistKey, title, thumbnail, artists, duration, type, index, activeSong, isLoading, ...prop } = props;
   const [favorites, setFavorites] = useState(false);
   const { listenedSongs } = useSelector((state) => state.playlist);
   const dispatch = useDispatch();
@@ -25,17 +31,26 @@ const SongItem = (props, ref) => {
       console.log('show more-vertical icon');
       return;
     } else {
-      if (type === 'topic') {
-        navigate(`${routes.playlist}/${encodeId}?type=playlist`);
-        return;
-      }
+      // if (type === 'topic') {
+      //   navigate(`${routes.playlist}/${encodeId}?type=playlist`);
+      //   return;
+      // }
       dispatch(setPointerHistory(listenedSongs.length));
       dispatch(setIndexCurrentSong(index));
+      dispatch(setCurrentSongId(encodeId));
+      dispatch(setCurrentPlaylistId(playlistKey));
+
       dispatch(pushListenedSongs(index));
     }
   };
   return (
-    <div ref={ref} className={cx('song-item-wrapper', 'p-2 mb-2', { active: activeSong })} onClick={handleClick}>
+    <SkeletonContainer
+      skeletonColor={'#f5f8fc'}
+      isLoading={isLoading}
+      ref={ref}
+      className={cx('song-item-wrapper', 'p-2 mb-2', 'pointer', { active: activeSong })}
+      onClick={handleClick}
+    >
       <Grid className={'align-items-center text-align-left'}>
         <Col lg={2}>
           <Grid className={'align-items-center'} gx={1}>
@@ -72,7 +87,7 @@ const SongItem = (props, ref) => {
           </Flexbox>
         </Col>
       </Grid>
-    </div>
+    </SkeletonContainer>
   );
 };
 

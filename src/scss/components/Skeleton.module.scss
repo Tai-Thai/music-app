@@ -18,9 +18,9 @@
 
 @keyframes skeleton-loading {
   0% {
-    background-color: $skeleton-dark;
+    background: $skeleton-dark;
   }
   100% {
-    background-color: $skeleton-light;
+    background: $skeleton-light;
   }
 }

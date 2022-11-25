@@ -6,8 +6,8 @@ import { Skeleton } from './Skeleton';
 
 const cx = classNames.bind(styles);
 
-const Thumbnail = ({ children, className, src, equalizer = false, ...props }) => {
-  const _className = cx('thumbnail', 'relative', className);
+const Thumbnail = ({ children, className, src, equalizer = false, avatar = false, ...props }) => {
+  const _className = cx('thumbnail', 'relative', className, { rounded: avatar });
   return (
     <Skeleton className={_className} style={{ backgroundImage: `url(${src})` }} {...props}>
       {children}

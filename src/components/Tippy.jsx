@@ -8,12 +8,13 @@ import { classNames } from '~/utils';
 const cx = classNames.bind(styles);
 
 const Tippy = (props) => {
-  const { children, content, placement, interactive = false, space = 10, ...prop } = props;
-  const [isShow, setIsShow] = useState(false);
+  const { children, isShow: Show, content, placement, interactive = false, space = 10, render: TippyComponent, className, ...prop } = props;
+  const [isShow, setIsShow] = useState(Show || false);
   const [positionDetail, setPositionDetail] = useState({});
   const childrenRef = useRef(null);
   const tippyContainerRef = useRef(null);
 
+  // hover on children node
   const handleMouseEnter = () => {
     // console.log('set show');
     setIsShow(true);
@@ -26,11 +27,13 @@ const Tippy = (props) => {
 
   const handleInteractive = () => {
     if (interactive) {
+      if (Show === false) return; // when you want setIsShow = false when your mouse on the TippyComponent
       setIsShow(true);
     }
   };
 
   const handleNodeClick = () => {
+    return;
     setIsShow(!isShow);
   };
   const getPosition = (_placement = placement, arrSuggested = []) => {
@@ -149,11 +152,11 @@ const Tippy = (props) => {
       _placement === 'center' ||
       !(left < 0 || top < 0 || left + tippyOffset.width > window.innerWidth || top + tippyOffset.height > window.innerHeight)
     ) {
-      console.log('STOP Placement: _____________________________' + _placement, content);
+      // console.log('STOP Placement: _____________________________' + _placement, content);
       return { top, left, padding };
     }
     // if (left < 0 || top < 0 || left + tippyOffset.width > window.innerWidth || top + tippyOffset.height > window.innerHeight) {
-    console.log('Placement: ', _placement);
+    // console.log('Placement: ', _placement);
     // console.log({ top: top + 'px', left: left + 'px' });
     const suggestPlacement = [
       'top',
@@ -174,7 +177,7 @@ const Tippy = (props) => {
     _suggestIndex = suggestPlacement.indexOf(_placement) + 1;
     if (_suggestIndex >= suggestPlacement.length) _suggestIndex = 0;
     arrSuggested.push(_suggestIndex);
-    console.log('suggestPlacement: =====> ', suggestPlacement[_suggestIndex]);
+    // console.log('suggestPlacement: =====> ', suggestPlacement[_suggestIndex]);
 
     return getPosition(suggestPlacement[_suggestIndex], arrSuggested);
     // }
@@ -192,19 +195,28 @@ const Tippy = (props) => {
     handleSetPosition();
   }, [isShow]);
 
+  // change position when component resize
   useEffect(() => {
     let timeId;
     const handleResize = () => {
       if (timeId) clearTimeout(timeId); // clearTimeout
-      timeId = setTimeout(() => {
-        handleSetPosition(); // handle get new position when window is resized
-      }, 600);
+      // handle get new position when window is resized
+      if (isShow) {
+        timeId = setTimeout(() => {
+          handleSetPosition();
+        }, 600);
+      }
     };
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  // Sync show outside or use forwardRef to pass setIsShow to parent
+  useEffect(() => {
+    setIsShow(Show);
+  }, [Show]);
 
   return (
     <>
@@ -221,16 +233,18 @@ const Tippy = (props) => {
         <div
           ref={tippyContainerRef}
           style={positionDetail}
-          className={cx('tippy-container')}
+          className={cx('tippy-container', className)}
           onMouseEnter={handleInteractive}
           onMouseLeave={handleMouseLeave}
         >
-          {content && isShow && (
+          {content && isShow ? (
             <div className={cx('tooltip-wrapper', 'bg-dark-alt', 'px-3', 'py-2')}>
               <Text fz={14} className={cx('cl-white')}>
                 {content}
               </Text>
             </div>
+          ) : (
+            TippyComponent && isShow && <TippyComponent />
           )}
         </div>,
         document.body

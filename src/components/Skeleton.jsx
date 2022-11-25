@@ -5,19 +5,20 @@ import styles from '~/scss/components/Skeleton.module.scss';
 
 const cx = classNames.bind(styles);
 
-export const SkeletonContainer = (props) => {
+export const SkeletonContainer = forwardRef((props, ref) => {
   const { children, className, tagName: TagName = 'div', isLoading, skeletonWidth, skeletonHeight, skeletonColor, ...prop } = props;
   const _className = cx(className, { 'skeleton-container': isLoading });
   return (
     <TagName
+      ref={ref}
       className={_className}
-      style={{ width: isLoading && skeletonWidth, height: isLoading && skeletonHeight, backgroundColor: skeletonColor }}
+      style={{ width: isLoading && skeletonWidth, height: isLoading && skeletonHeight, backgroundColor: isLoading && skeletonColor }}
       {...prop}
     >
       {children}
     </TagName>
   );
-};
+});
 
 export const Skeleton = forwardRef((props, ref) => {
   const {
@@ -40,18 +41,6 @@ export const Skeleton = forwardRef((props, ref) => {
     'skeleton-loading': isLoading,
     [`skeleton-${skeletonType}`]: skeletonType && isLoading
   });
-  // if (skeletonStyle && skeletonType == 'thumbnail') {
-  //   console.log({ skeletonStyle, _skeletonStyle });
-  //   console.log({
-  //     ...style,
-  //     ...skeletonStyle,
-  //     width: isLoading && skeletonWidth,
-  //     height: isLoading && skeletonHeight
-  //   });
-  // }
-  if (skeletonType == 'thumbnail') {
-    console.log({ skeletonStyle, _skeletonStyle, isLoading });
-  }
   return (
     <TagName
       ref={ref}

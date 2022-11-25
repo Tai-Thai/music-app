@@ -12,7 +12,7 @@ function DefaultLayout({ children }) {
   return (
     <div className={cx('wrapper')} style={{ backgroundImage: `url(${backgroundImage})` }}>
       <Header />
-      <Container className='mt-5'>
+      <Container className={cx('mt-5', 'main-wrapper')}>
         <Grid gy={0}>
           <Col lg={1}>
             <Sidebar />

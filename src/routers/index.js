@@ -1,6 +1,6 @@
 // import { DefaultLayout } from '~/components/Layout';
 import { routes } from '~/configs';
-import { Home, Collection, Profile, Playlist } from '~/pages';
+import { Home, Collection, Profile, Playlist, Search } from '~/pages';
 
 export const publishRoutes = [
   {
@@ -12,11 +12,19 @@ export const publishRoutes = [
     component: Collection
   },
   {
-    path: `${routes.playlist}/:playlistKey`,
+    path: `${routes.playlist}`, // current playlist
+    component: Playlist
+  },
+  {
+    path: `${routes.playlist}/:playlistKey`, // show playlist with playlist key
     component: Playlist
   },
   {
     path: routes.profile,
     component: Profile
+  },
+  {
+    path: routes.search,
+    component: Search
   }
 ];

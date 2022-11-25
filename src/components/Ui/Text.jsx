@@ -13,7 +13,7 @@ export const Text = forwardRef((props, ref) => {
   const _className = cx(className, { bold, uppercase, capitalize, [`fz-${fz}`]: fz, [`max-line-${maxLine}`]: maxLine });
 
   return (
-    <Skeleton ref={ref} skeletonType={'text'} className={_className} {...prop}>
+    <Skeleton ref={ref} skeletonType={'text'} tagName={tagName} className={_className} {...prop}>
       {children}
     </Skeleton>
   );
@@ -26,6 +26,6 @@ Text.propTypes = {
   bold: PropTypes.bool,
   uppercase: PropTypes.bool,
   capitalize: PropTypes.bool,
-  fz: PropTypes.oneOf([10, 12, 14, 17, 20, 24, 29, 35]), // styles from figma
+  fz: PropTypes.oneOf([10, 12, 14, 15, 16, 17, 20, 24, 29, 35]), // styles from figma
   maxLine: PropTypes.oneOf([1, 2, 3, 4, 5, 6])
 };

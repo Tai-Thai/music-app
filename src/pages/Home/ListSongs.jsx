@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Flexbox, Grid, Col, Text } from '~/components/Ui';
 import { classNames } from '~/utils';
 import styles from '~/scss/pages/Home/Home.module.scss';
-import { Thumbnail } from '~/components';
+import { Skeleton, SkeletonContainer, Thumbnail } from '~/components';
 import { useDispatch } from 'react-redux';
 import { setCurrentSongId } from '~/features/playlist/playlistSlice';
 import { useNavigate } from 'react-router-dom';
@@ -76,7 +76,7 @@ const ListSongs = ({ data, title, itemType, isLoading, ...props }) => {
       <div ref={container} className={cx('container-songs')}>
         <div ref={listSongs} className={cx('list-songs', 'd-flex', 'gx-3')}>
           {isLoading
-            ? [1, 2, 3, 4, 5, 6].map((item, index) => (
+            ? [1, 2, 3, 4, 5, 6, 7].map((item, index) => (
                 <SongItem key={index} isScrolling={isScrolling} isLoading={isLoading} itemType={itemType} />
               ))
             : data?.map((songItem) => {

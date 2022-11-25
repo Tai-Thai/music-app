@@ -16,7 +16,12 @@ const ChartCard = ({ encodeId, title, thumbnail, artist, position, isLoading = f
   const handleSetCurrentSong = () => dispatch(setCurrentSongId(encodeId));
 
   return (
-    <SkeletonContainer className={cx('p-3 bg-dark-alt', 'chart-card')} isLoading={isLoading} onClick={handleSetCurrentSong}>
+    <SkeletonContainer
+      className={cx('p-3 bg-dark-alt', 'chart-card', 'pointer')}
+      isLoading={isLoading}
+      skeletonColor={'#f5f8fc'}
+      onClick={handleSetCurrentSong}
+    >
       <Grid gx={1} className={cx('chart-card-grid', 'align-items-center')}>
         <Col lg={3} className='mr-1'>
           <Thumbnail src={thumbnail} isLoading={isLoading} />

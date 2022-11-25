@@ -1,0 +1,53 @@
+@use '../index.scss' as *;
+
+.search-modal-container {
+  z-index: 90;
+}
+
+.search-field {
+  position: relative;
+  font-size: 1.4rem;
+  color: $light;
+  line-height: 24px;
+  background-color: transparent;
+  outline: none;
+  border: 1px solid transparent;
+  border-bottom-width: 0;
+  transition: all 0.5s;
+
+  &:focus + .search-field-underline,
+  &:not(:placeholder-shown) + .search-field-underline {
+    width: 100%;
+  }
+}
+.search-field-underline {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-block;
+  width: 0;
+  height: 1px;
+  background-color: $primary;
+  transition: width 0.4s ease-out;
+}
+
+.search-container {
+  border-radius: 5px;
+  overflow: auto;
+  width: 600px;
+  max-width: 600px;
+  max-height: 480px;
+}
+// Search keywords
+.search-keyword-container {
+  border-radius: 5px;
+  transition: all 0.2s;
+  &:hover {
+    background-color: $alpha-bg;
+  }
+}
+
+.search-keyword-icon {
+  width: 19px;
+}

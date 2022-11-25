@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Instance
 export const request = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || 'https://api-zingmp3-public.herokuapp.com/api'
+  baseURL: process.env.REACT_APP_API_BASE_URL
 });
 
 // Add a request interceptor

@@ -2,11 +2,13 @@
 
 .wrapper {
   position: relative;
+  z-index: 1;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
 
-  & > * {
+  // // for background when in playlist page
+  & > .main-wrapper {
     position: relative;
     z-index: 1;
   }

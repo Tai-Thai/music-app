@@ -2,9 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   currentSongId: '',
-  indexCurrentSong: null,
+  indexCurrentSong: null, // index in playlist
   pointerHistory: null, // history to next and previous song
   playlist: [],
+  currentPlaylistId: '',
   listenedSongs: []
 };
 
@@ -13,7 +14,11 @@ export const songSlice = createSlice({
   initialState,
   reducers: {
     setCurrentSongId: (state, actions) => {
+      console.log({ actions });
       state.currentSongId = actions.payload;
+    },
+    setCurrentPlaylistId: (state, actions) => {
+      state.currentPlaylistId = actions.payload;
     },
     setPlaylist: (state, actions) => {
       state.playlist = actions.payload;
@@ -47,6 +52,13 @@ export const songSlice = createSlice({
   }
 });
 
-export const { setCurrentSongId, setPlaylist, setIndexCurrentSong, pushListenedSongs, setPointerHistory, resetPlaylist } =
-  songSlice.actions;
+export const {
+  setCurrentSongId,
+  setCurrentPlaylistId,
+  setPlaylist,
+  setIndexCurrentSong,
+  pushListenedSongs,
+  setPointerHistory,
+  resetPlaylist
+} = songSlice.actions;
 export default songSlice.reducer;

@@ -1,0 +1,17 @@
+@use '../index.scss' as *;
+
+// Artist card
+.artist-card-container {
+  border-radius: 5px;
+  transition: all 0.2s;
+  &:hover {
+    background-color: $alpha-bg;
+  }
+}
+.artist-card__thumbnail {
+  width: 52px;
+}
+
+.card-title {
+  line-height: 24px;
+}

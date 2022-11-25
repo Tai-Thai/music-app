@@ -12,32 +12,32 @@ import { routes } from '~/configs';
 const cx = classNames.bind(styles);
 
 const PlaylistCard = (props) => {
-  const { thumbnail, title, dateModify, numOfItems, _key, ...prop } = props;
+  const { thumbnail, className, title, dateModify, numOfItems, artistsNames, thumbnailM, textType, encodeId, isLoading, ...prop } = props;
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`${routes.playlist}/${_key}?type=playlist`);
+    navigate(`${routes.playlist}/${encodeId}?type=playlist`);
   };
   return (
-    <Col lg={3} className={cx('playlist-card-wrapper')} onClick={handleClick}>
-      <Thumbnail className={cx('playlist-card', 'relative')} src={thumbnail}>
+    <div className={cx('playlist-card-wrapper', className)} onClick={handleClick}>
+      <Thumbnail className={cx('playlist-card', 'relative')} isLoading={isLoading} src={thumbnailM || thumbnail}>
         <div className={cx('playlist-card__content')}>
-          <Flexbox column className={cx('playlist-card__content-top')}>
-            <Text fz={24} maxLine={2}>
+          <Flexbox column className={cx('playlist-card__content-top', 'pb-2')}>
+            <Text fz={24} maxLine={2} bold>
               {title || 'Limits'}
             </Text>
-            <Text fz={10} className={'op-3'}>
-              {dateModify || 'John watts'}
+            <Text fz={14} maxLine={1} className={'op-3'}>
+              {artistsNames || 'Tai Thai'}
             </Text>
           </Flexbox>
-          <Text fz={10} className={cx('like-amounts')}>
-            {numOfItems ? `${numOfItems} items` : '2.3m likes'}
+          <Text fz={10} maxLine={1} className={cx('like-amounts')}>
+            {textType}
           </Text>
         </div>
         <Flexbox alignCenter justifyCenter className={cx('playlist-card__play', 'rounded', 'pointer')}>
           <PauseIcon className={cx('cl-secondary')} />
         </Flexbox>
       </Thumbnail>
-    </Col>
+    </div>
   );
 };
 

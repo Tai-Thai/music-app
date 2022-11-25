@@ -1,6 +1,8 @@
 @use '../index.scss' as *;
 
 .wrapper {
+  position: relative;
+  z-index: 2;
   height: $nav-height;
   text-align: center;
 
@@ -11,18 +13,4 @@
 
 .search-icon {
   width: 16px;
-}
-
-.search-field {
-  font-size: 1.4rem;
-  color: $light;
-  line-height: 24px;
-  background-color: transparent;
-  outline: none;
-  border: 1px solid transparent;
-  transition: all 0.5s;
-
-  &:focus {
-    border-bottom-color: $light;
-  }
 }
